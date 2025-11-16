@@ -12,9 +12,9 @@ export default function About() {
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
           <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
             <p>
-              Hi! I'm <span className="text-foreground font-semibold">Kelechi</span> — a
-              JavaScript Developer, Python Automation Engineer, and 3D/Web App
-              Builder with <span className="text-foreground font-semibold">4 years</span> of
+              Hi! I'm <span className="text-foreground font-semibold">Kelechi Aribeana</span> — a
+              JavaScript Developer, Python Automation Engineer, and 3D Web Creator
+              with <span className="text-foreground font-semibold">3 years</span> of
               hands-on experience helping SMEs, founders, and teams bring digital
               ideas to life.
             </p>
@@ -26,8 +26,8 @@ export default function About() {
             </p>
 
             <p>
-              I've delivered SME tools, automated file management processes, built
-              handyman marketplace systems, and crafted responsive UIs for
+              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator, a Client Service Booking app, automated file management processes, built a 
+              handyman marketplace system, and crafted responsive UIs for
               startups and small businesses. I love turning ideas into real,
               functional, polished products.
             </p>
