@@ -58,10 +58,10 @@ export default function Header() {
                 scrollToSection("#home");
                 setIsMenuOpen(false);
               }}
-              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent z-[101]"
+              className="text-xl md:text-2xl font-bold"
               data-testid="link-logo"
             >
-              Kelechi
+              AstralBr33d 👽
             </a>
 
             <div className="hidden md:flex items-center gap-8">

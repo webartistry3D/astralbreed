@@ -49,17 +49,17 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6 md:px-8 py-20 relative z-10">
         <div className="flex flex-col items-center text-center space-y-8">
           <div className="space-y-6 max-w-5xl">
-            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
               <div className="mb-3">
-                <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent">
-                  JavaScript Developer
+                <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text">
+                  👨🏾‍💻 JavaScript Developer
                 </span>
-              </div>
+              </div><br></br>
               <div className="mb-3">
-                <span className="text-foreground">Automation Engineer</span>
-              </div>
+                <span className="text-foreground">🤖 Python Automation</span>
+              </div><br></br>
               <div>
-                <span className="text-foreground">3D Web Creator</span>
+                <span className="text-foreground">🎲 3D Web Creator</span>
               </div>
             </h1>
 
