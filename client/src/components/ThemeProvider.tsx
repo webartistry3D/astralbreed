@@ -20,15 +20,14 @@ export function ThemeProvider({
   children,
   defaultTheme = "dark",
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) || defaultTheme
-  );
+  // Keep theme purely in memory
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
 
   useEffect(() => {
+    // Apply theme class to document root
     const root = document.documentElement;
     root.classList.remove("light", "dark");
     root.classList.add(theme);
-    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
@@ -40,7 +39,7 @@ export function ThemeProvider({
 
 export function useTheme() {
   const context = useContext(ThemeProviderContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
