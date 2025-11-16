@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,17 @@ const navLinks = [
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -36,90 +47,98 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/70 dark:bg-background/70 backdrop-blur-xl border-b border-border/50">
-      <nav className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("#home");
-            }}
-            className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent"
-            data-testid="link-logo"
-          >
-            Kelechi
-          </a>
+    <>
+      <header className="fixed top-0 left-0 right-0 z-[100] bg-background/70 dark:bg-background/70 backdrop-blur-xl border-b border-border/50">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="flex items-center justify-between h-16 md:h-20">
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("#home");
+                setIsMenuOpen(false);
+              }}
+              className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent z-[101]"
+              data-testid="link-logo"
+            >
+              Kelechi
+            </a>
 
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors hover-elevate px-3 py-2 rounded-md"
-                data-testid={`link-nav-${link.name.toLowerCase()}`}
+            <div className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(link.href);
+                  }}
+                  className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors hover-elevate px-3 py-2 rounded-md"
+                  data-testid={`link-nav-${link.name.toLowerCase()}`}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-4 z-[101]">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="rounded-full"
+                data-testid="button-theme-toggle"
               >
-                {link.name}
-              </a>
-            ))}
-          </div>
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
 
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
-              data-testid="button-theme-toggle"
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </Button>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden rounded-full"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              data-testid="button-menu-toggle"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden rounded-full"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                data-testid="button-menu-toggle"
+              >
+                {isMenuOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </Button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </header>
 
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-background/95 backdrop-blur-xl z-40 overflow-hidden">
-          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] gap-6 p-8 overflow-y-auto">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection(link.href);
-                }}
-                className="text-2xl font-semibold text-foreground/80 hover:text-foreground transition-colors"
-                data-testid={`link-mobile-${link.name.toLowerCase()}`}
-              >
-                {link.name}
-              </a>
-            ))}
+        <div
+          className="fixed inset-0 z-[99] md:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        >
+          <div className="absolute inset-0 top-16 bg-background/98 backdrop-blur-2xl">
+            <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] gap-8 p-8">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection(link.href);
+                  }}
+                  className="text-3xl font-bold text-foreground/90 hover:text-foreground transition-colors active:scale-95"
+                  data-testid={`link-mobile-${link.name.toLowerCase()}`}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
