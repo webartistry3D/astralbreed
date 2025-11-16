@@ -81,19 +81,23 @@ export default function Services() {
           {services.map((service, index) => (
             <div
               key={index}
-              className="perspective-1000"
+              className="perspective-1000 h-80"
               style={{ perspective: "1000px" }}
             >
               <div
-                className={`relative w-full h-80 transition-transform duration-700 transform-style-3d cursor-pointer ${
-                  flippedCard === index ? "rotate-y-180" : ""
+                className={`relative w-full h-full transition-all duration-500 cursor-pointer ${
+                  flippedCard === index
+                    ? "scale-150 z-50"
+                    : "scale-100 z-0"
                 }`}
                 onClick={() => handleCardClick(index)}
                 data-testid={`card-service-${index}`}
                 style={{
                   transformStyle: "preserve-3d",
                   transform:
-                    flippedCard === index ? "rotateY(180deg)" : "rotateY(0deg)",
+                    flippedCard === index
+                      ? "rotateY(180deg) scale(1.5)"
+                      : "rotateY(0deg) scale(1)",
                 }}
               >
                 <div
@@ -115,20 +119,20 @@ export default function Services() {
                 </div>
 
                 <div
-                  className="absolute inset-0 backface-hidden bg-card/95 backdrop-blur-sm border border-card-border rounded-2xl p-6 overflow-y-auto"
+                  className="absolute inset-0 backface-hidden bg-card/95 backdrop-blur-sm border border-card-border rounded-2xl p-6 flex flex-col"
                   style={{
                     backfaceVisibility: "hidden",
                     transform: "rotateY(180deg)",
                   }}
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center flex-shrink-0">
                       <service.icon className="h-5 w-5 text-primary-foreground" />
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8"
+                      className="h-8 w-8 flex-shrink-0"
                       onClick={(e) => {
                         e.stopPropagation();
                         setFlippedCard(null);
@@ -139,7 +143,7 @@ export default function Services() {
                     </Button>
                   </div>
                   <h3 className="text-lg font-semibold mb-3">{service.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
                     {service.details}
                   </p>
                 </div>
