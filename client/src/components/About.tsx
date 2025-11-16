@@ -26,10 +26,10 @@ export default function About() {
             </p>
 
             <p>
-              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator, a Client Service Booking app, automated file management processes, built a 
-              handyman marketplace system, and crafted responsive UIs for
+              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator, a Client Service Booking app, an Automated File Management bot, a 
+              Handyman Marketplace app, and crafted responsive UIs for
               startups and small businesses. I love turning ideas into real,
-              functional, polished products.
+              functional, polished products. ✨
             </p>
           </div>
 
