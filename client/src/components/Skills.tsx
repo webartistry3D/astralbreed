@@ -1,18 +1,31 @@
-import { Badge } from "@/components/ui/badge";
+import {
+  SiJavascript,
+  SiTypescript,
+  SiReact,
+  SiNextdotjs,
+  SiPython,
+  SiFastapi,
+  SiTailwindcss,
+  SiVite,
+  SiThreedotjs,
+  SiGit,
+  SiFigma,
+} from "react-icons/si";
+import { Plug } from "lucide-react";
 
 const skills = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Python",
-  "FastAPI",
-  "Tailwind CSS",
-  "Vite",
-  "Three.js",
-  "Git",
-  "Figma",
-  "API Integrations",
+  { name: "JavaScript", icon: SiJavascript },
+  { name: "TypeScript", icon: SiTypescript },
+  { name: "React", icon: SiReact },
+  { name: "Next.js", icon: SiNextdotjs },
+  { name: "Python", icon: SiPython },
+  { name: "FastAPI", icon: SiFastapi },
+  { name: "Tailwind CSS", icon: SiTailwindcss },
+  { name: "Vite", icon: SiVite },
+  { name: "Three.js", icon: SiThreedotjs },
+  { name: "Git", icon: SiGit },
+  { name: "Figma", icon: SiFigma },
+  { name: "API Integrations", icon: Plug },
 ];
 
 export default function Skills() {
@@ -26,16 +39,20 @@ export default function Skills() {
           Skills & Technologies
         </h2>
 
-        <div className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 max-w-6xl mx-auto">
           {skills.map((skill, index) => (
-            <Badge
+            <div
               key={index}
-              variant="secondary"
-              className="px-6 py-3 text-base font-medium hover:scale-105 transition-transform cursor-default"
-              data-testid={`badge-skill-${index}`}
+              className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-card/50 border border-card-border hover:scale-105 hover-elevate transition-all cursor-default group"
+              data-testid={`skill-${index}`}
             >
-              {skill}
-            </Badge>
+              <div className="w-16 h-16 flex items-center justify-center">
+                <skill.icon className="w-12 h-12 text-foreground group-hover:text-primary transition-colors" />
+              </div>
+              <p className="text-sm font-medium text-center text-muted-foreground group-hover:text-foreground transition-colors">
+                {skill.name}
+              </p>
+            </div>
           ))}
         </div>
       </div>

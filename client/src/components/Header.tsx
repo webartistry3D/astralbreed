@@ -101,8 +101,8 @@ export default function Header() {
       </nav>
 
       {isMenuOpen && (
-        <div className="md:hidden fixed inset-0 top-16 bg-background/95 backdrop-blur-xl z-40">
-          <div className="flex flex-col items-center justify-center h-full gap-8 p-8">
+        <div className="md:hidden fixed inset-0 top-16 bg-background/95 backdrop-blur-xl z-40 overflow-hidden">
+          <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] gap-6 p-8 overflow-y-auto">
             {navLinks.map((link) => (
               <a
                 key={link.name}
