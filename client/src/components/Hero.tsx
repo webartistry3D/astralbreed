@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
+import Canvas3D from "./Canvas3D";
 
 export default function Hero() {
   const scrollToSection = (href: string) => {
@@ -25,24 +26,7 @@ export default function Hero() {
 
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl h-96">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className="w-64 h-64 bg-gradient-to-br from-primary/30 to-cyan-400/30 rounded-3xl rotate-12 opacity-40 blur-2xl"
-              style={{ animation: "float 6s ease-in-out infinite" }}
-            />
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className="w-56 h-56 bg-gradient-to-br from-primary/40 to-cyan-400/40 rounded-3xl -rotate-12"
-              style={{ animation: "float 7s ease-in-out infinite 1s" }}
-            />
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className="w-48 h-48 bg-gradient-to-br from-cyan-400/30 to-primary/30 rounded-3xl rotate-45 opacity-50"
-              style={{ animation: "spin-slow 20s linear infinite" }}
-            />
-          </div>
+          <Canvas3D />
         </div>
       </div>
 
@@ -92,25 +76,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) rotate(-12deg);
-          }
-          50% {
-            transform: translateY(-30px) rotate(-12deg);
-          }
-        }
-        @keyframes spin-slow {
-          from {
-            transform: rotate(45deg);
-          }
-          to {
-            transform: rotate(405deg);
-          }
-        }
-      `}</style>
     </section>
   );
 }

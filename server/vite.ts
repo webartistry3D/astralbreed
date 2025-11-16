@@ -58,6 +58,8 @@ export async function setupVite(app: Express, server: Server) {
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`,
       );
+      // Ensure HTML is never cached
+      res.set("Cache-Control", "public, max-age=0, must-revalidate");
       const page = await vite.transformIndexHtml(url, template);
       res.status(200).set({ "Content-Type": "text/html" }).end(page);
     } catch (e) {
@@ -76,10 +78,24 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));
+  // Serve static assets (JS, CSS) with long cache, since they have hash in filename
+  app.use(express.static(distPath, {
+    maxAge: "30d",
+    etag: false,
+    setHeaders: (res, path) => {
+      // Only cache versioned assets (with hash) long-term
+      if (/\.[a-f0-9]{8}\.(js|css|woff2|png|svg|ico)$/.test(path)) {
+        res.set("Cache-Control", "public, max-age=31536000, immutable");
+      } else {
+        // HTML, JSON, and other files should always be fresh
+        res.set("Cache-Control", "public, max-age=0, must-revalidate");
+      }
+    },
+  }));
 
   // fall through to index.html if the file doesn't exist
   app.use("*", (_req, res) => {
+    res.set("Cache-Control", "public, max-age=0, must-revalidate");
     res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
