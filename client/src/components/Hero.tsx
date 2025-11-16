@@ -72,7 +72,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               size="lg"
-              className="text-base group"
+              className="bg-cyan-500 hover:bg-cyan-600 text-white text-base flex items-center justify-center gap-2 transition-colors "
               onClick={() => scrollToSection("#contact")}
               data-testid="button-hire-me"
             >
@@ -82,7 +82,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="text-base"
+              className="bg-pink-500 hover:bg-pink-600 text-white text-base"
               onClick={() => scrollToSection("#projects")}
               data-testid="button-view-projects"
             >

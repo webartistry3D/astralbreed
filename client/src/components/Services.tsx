@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Code2, Cog, Sparkles, Box, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -41,19 +41,20 @@ export default function Services() {
   const [flippedCard, setFlippedCard] = useState<number | null>(null);
   const [parallaxOffset, setParallaxOffset] = useState(0);
 
-  const handleScroll = () => {
-    const section = document.getElementById("services");
-    if (section) {
-      const rect = section.getBoundingClientRect();
-      const scrollPercent = -rect.top / (rect.height + window.innerHeight);
-      setParallaxOffset(scrollPercent * 100);
-    }
-  };
+  // Scroll-based parallax
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = document.getElementById("services");
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        const scrollPercent = -rect.top / (rect.height + window.innerHeight);
+        setParallaxOffset(scrollPercent * 100);
+      }
+    };
 
-  useState(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  });
+  }, []);
 
   const handleCardClick = (index: number) => {
     setFlippedCard(flippedCard === index ? null : index);
@@ -64,11 +65,10 @@ export default function Services() {
       id="services"
       className="relative py-16 md:py-24 lg:py-32 overflow-hidden scroll-mt-20"
     >
+      {/* Parallax Gradient */}
       <div
         className="absolute inset-0 bg-gradient-to-br from-primary/10 via-cyan-400/10 to-primary/10"
-        style={{
-          transform: `translateY(${parallaxOffset * 0.5}px)`,
-        }}
+        style={{ transform: `translateY(${parallaxOffset * 0.5}px)` }}
       />
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM5Q0EzQUYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00em0wLTEwYzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20" />
 
@@ -78,91 +78,104 @@ export default function Services() {
         </h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="perspective-1000 h-80"
-              style={{ perspective: "1000px" }}
-            >
-              <div
-                className={`relative w-full h-full transition-all duration-500 cursor-pointer ${
-                  flippedCard === index
-                    ? "scale-150 z-50"
-                    : "scale-100 z-0"
-                }`}
-                onClick={() => handleCardClick(index)}
-                data-testid={`card-service-${index}`}
-                style={{
-                  transformStyle: "preserve-3d",
-                  transform:
-                    flippedCard === index
-                      ? "rotateY(180deg) scale(1.5)"
-                      : "rotateY(0deg) scale(1)",
-                }}
-              >
-                <div
-                  className="absolute inset-0 backface-hidden bg-card/80 backdrop-blur-sm border border-card-border rounded-2xl p-8 hover-elevate"
-                  style={{ backfaceVisibility: "hidden" }}
-                >
-                  <div className="mb-6">
-                    <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
-                      <service.icon className="h-6 w-6 text-primary-foreground" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4">{service.title}</h3>
-                  <p className="text-muted-foreground text-sm">
-                    {service.description}
-                  </p>
-                  <p className="text-xs text-muted-foreground/60 mt-4">
-                    Click to learn more
-                  </p>
-                </div>
+          {services.map((service, index) => {
+            const isFlipped = flippedCard === index;
+            const Icon = service.icon;
 
+            return (
+              <div
+                key={index}
+                className="group perspective-1000 h-80 md:h-96"
+                style={{ perspective: "1000px" }}
+              >
+                {/* Card Wrapper */}
                 <div
-                  className="absolute inset-0 backface-hidden bg-card/95 backdrop-blur-sm border border-card-border rounded-2xl p-6 flex flex-col"
+                  className="relative w-full h-full transition-transform duration-500 cursor-pointer"
+                  onClick={() => handleCardClick(index)}
+                  data-testid={`card-service-${index}`}
                   style={{
-                    backfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)",
+                    transformStyle: "preserve-3d",
+                    transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
                   }}
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center flex-shrink-0">
-                      <service.icon className="h-5 w-5 text-primary-foreground" />
+                  {/* Front Side */}
+                  <div
+                    className="absolute inset-0 backface-hidden bg-card/80 backdrop-blur-sm border border-card-border rounded-2xl p-6 flex flex-col justify-between"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
+                        <Icon className="h-6 w-6 text-primary-foreground" />
+                      </div>
+                      {isFlipped && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setFlippedCard(null);
+                          }}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      )}
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 flex-shrink-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFlippedCard(null);
-                      }}
-                      data-testid={`button-close-service-${index}`}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+
+                    <div className="mt-4 flex-1 flex flex-col justify-center">
+                      <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
+                      <p className="text-muted-foreground text-sm">
+                        {service.description}
+                      </p>
+                      <p className="text-xs text-muted-foreground/60 mt-2">
+                        Click to learn more
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-3">{service.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                    {service.details}
-                  </p>
+
+                  {/* Back Side */}
+                  <div
+                    className="absolute inset-0 backface-hidden bg-card/95 backdrop-blur-sm border border-card-border rounded-2xl p-4 flex flex-col overflow-y-auto"
+                    style={{
+                      backfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)",
+                      maxHeight: "100%",
+                    }}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center flex-shrink-0">
+                        <Icon className="h-5 w-5 text-primary-foreground" />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6 flex-shrink-0"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFlippedCard(null);
+                        }}
+                        data-testid={`button-close-service-${index}`}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                      {service.details}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
+      {/* Styles */}
       <style>{`
-        .rotate-y-180 {
-          transform: rotateY(180deg);
-        }
         .backface-hidden {
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
-        }
-        .transform-style-3d {
-          transform-style: preserve-3d;
         }
       `}</style>
     </section>

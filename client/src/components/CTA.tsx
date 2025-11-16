@@ -11,10 +11,11 @@ export default function CTA() {
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
             Ready to build something{" "}
-            <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
-              fast, modern, and efficient?
-            </span>
+            <span className="text-cyan-500">fast</span>,{" "}
+            <span className="text-yellow-400">modern</span>, and{" "}
+            <span className="text-pink-500">efficient?</span>
           </h2>
+
 
           <p className="text-lg md:text-xl text-muted-foreground">
             Let's turn your idea into a working product.
@@ -22,7 +23,7 @@ export default function CTA() {
 
           <Button
             size="lg"
-            className="text-base group"
+            className="text-base group bg-yellow-500 hover:bg-yellow-600 text-black border border-white-0"
             data-testid="button-contact"
           >
             <Mail className="mr-2 h-5 w-5" />

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -17,33 +18,21 @@ export default function Header() {
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   const scrollToSection = (href: string) => {
     const element = document.querySelector(href);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-      setIsMenuOpen(false);
-    }
+    if (!element) return;
+    const offset = 80;
+    const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top, behavior: "smooth" });
+    setIsMenuOpen(false);
   };
 
   return (
@@ -56,7 +45,6 @@ export default function Header() {
               onClick={(e) => {
                 e.preventDefault();
                 scrollToSection("#home");
-                setIsMenuOpen(false);
               }}
               className="text-xl md:text-2xl font-bold"
               data-testid="link-logo"
@@ -103,42 +91,49 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 data-testid="button-menu-toggle"
               >
-                {isMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
+                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </div>
           </div>
         </nav>
       </header>
 
-      {isMenuOpen && (
-        <div
-          className="fixed inset-0 z-[99] md:hidden"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          <div className="absolute inset-0 top-16 bg-background/98 backdrop-blur-2xl">
-            <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] gap-8 p-8">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.href);
-                  }}
-                  className="text-3xl font-bold text-foreground/90 hover:text-foreground transition-colors active:scale-95"
-                  data-testid={`link-mobile-${link.name.toLowerCase()}`}
-                >
-                  {link.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Mobile Menu Tray */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="fixed inset-0 z-[99]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <motion.div
+              className="absolute inset-x-0 top-0 bg-background/98 backdrop-blur-2xl shadow-lg"
+              initial={{ y: "-100%" }}
+              animate={{ y: 0, transition: { duration: 0.35, ease: "easeInOut" } }}
+              exit={{ y: "-100%", transition: { duration: 0.25, ease: "easeInOut" } }}
+            >
+              <div className="flex flex-col items-center justify-center h-[calc(100vh-4rem)] gap-8 p-8">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection(link.href);
+                    }}
+                    className="text-3xl font-bold text-foreground/90 hover:text-foreground transition-colors active:scale-95"
+                    data-testid={`link-mobile-${link.name.toLowerCase()}`}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
