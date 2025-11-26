@@ -23,7 +23,7 @@ export default function Hero() {
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 -z-10" />
 
       {/* 3D Canvas */}
-      <div className="w-full max-w-2xl h-96 mt-16">
+      <div className="w-full max-w-7xl h-96 mt-16">
         <Canvas3D />
       </div>
 
@@ -32,18 +32,18 @@ export default function Hero() {
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6">
           <div>
             <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text">
-              👨🏾‍💻 JavaScript Developer
+              JavaScript Developer<br></br>👨🏾‍💻 
             </span>
           </div>
           <div>
-            <span className="text-foreground">🤖 Python Automation</span>
+            <span className="text-foreground">Python Automation<br></br>🤖</span>
           </div>
           <div>
-            <span className="text-foreground">🎲 3D Web Creator</span>
+            <span className="text-foreground">3D Web Creator<br></br>🎲</span>
           </div>
         </h1>
 
-        <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-6">
+        <p className="text-md md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
           I build fast, modern web experiences and intelligent automation tools.
         </p>
 

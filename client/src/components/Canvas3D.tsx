@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 function Model() {
   // Load GLB model with animations
-  const { scene, animations } = useGLTF("/models/obot.glb");
+  const { scene, animations } = useGLTF("/models/astralbreed-obot.glb");
   const { actions } = useAnimations(animations, scene);
 
   // Play all animations when available
@@ -32,7 +32,7 @@ function Model() {
   return (
     <primitive
       object={scene}
-      scale={3}              // Adjust size
+      scale={5.1}              // Adjust size
       position={[0, -1, 0]}  // Slightly lower
       rotation={[0, Math.PI / 4, 0]} // Initial rotation
     />
@@ -40,7 +40,7 @@ function Model() {
 }
 
 // Preload the GLB globally for faster loading
-useGLTF.preload("/models/obot.glb");
+useGLTF.preload("/models/astralbeed-obot.glb");
 
 export default function Canvas3D() {
   return (
@@ -51,13 +51,13 @@ export default function Canvas3D() {
     >
       <Suspense fallback={null}>
         {/* HDRI Lighting */}
-        <Environment files="/environment/citrus_orchard_puresky_1k.hdr" background />
+        {/*<Environment files="/environment/citrus_orchard_puresky_1k.hdr" background />*/}
 
         {/* User controls */}
         <OrbitControls
           enableZoom={false}
           autoRotate
-          autoRotateSpeed={1.2}
+          autoRotateSpeed={0.75}
         />
 
         {/* 3D Model */}
