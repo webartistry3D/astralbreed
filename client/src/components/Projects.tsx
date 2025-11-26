@@ -49,7 +49,7 @@ const projects = [
     image: handymanImage,
     fullDescription:
       "A two-sided marketplace platform connecting homeowners with skilled handyman and service professionals. Features include service booking, real-time availability, and review systems.",
-    technologies: ["React", "Next.js", "Stripe", "Firebase", "Framer Motion"],
+    technologies: ["React", "Next.js", "Form Handling", "GitHub", "Framer Motion"],
     features: [
       "Service provider profiles and portfolios",
       "Real-time booking system",
