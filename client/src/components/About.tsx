@@ -1,3 +1,6 @@
+import AboutModel from "./AboutModel";
+import { Suspense } from "react";
+
 export default function About() {
   return (
     <section
@@ -9,7 +12,8 @@ export default function About() {
           About Me
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-[30%_70%] gap-12 items-center max-w-6xl mx-auto">
+          {/* LEFT SIDE — TEXT */}
           <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
             <p>
               Hi! I'm <span className="text-foreground font-semibold">Kelechi Aribeana</span> — a
@@ -26,30 +30,19 @@ export default function About() {
             </p>
 
             <p>
-              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator, a Client Service Booking app, an Automated File Management bot, a 
-              Handyman Marketplace app, and crafted responsive UIs for
-              startups and small businesses. I love turning ideas into real,
-              functional, polished products. ✨
+              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator,
+              a Client Service Booking app, an Automated File Management bot, a Handyman Marketplace 
+              app, and crafted responsive UIs for startups and small businesses. I love turning ideas 
+              into real, functional, polished products. ✨
             </p>
           </div>
 
-          <div className="flex items-center justify-center">
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-primary to-cyan-400 rounded-2xl"
-                style={{ animation: "rotate3d 10s linear infinite" }}
-              />
-              <div className="absolute inset-4 bg-background rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-2">👤</div>
-                  <p className="text-sm text-muted-foreground">
-                    3D Avatar Placeholder
-                  </p>
-                </div>
-              </div>
-            </div>
+          {/* RIGHT SIDE — 3D CANVAS */}
+          <div className="w-full h-[350px] md:h-[500px] lg:h-[600px] rounded-xl overflow-hidden">
+            <AboutModel />
           </div>
         </div>
+
       </div>
 
       <style>{`

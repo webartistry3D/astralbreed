@@ -32,14 +32,14 @@ export default function Hero() {
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6">
           <div>
             <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text">
-              JavaScript Developer<br></br>👨🏾‍💻 
+              JavaScript Developer<br></br> •
             </span>
           </div>
           <div>
-            <span className="text-foreground">Python Automation<br></br>🤖</span>
+            <span className="text-foreground">Python Automation<br></br> • </span>
           </div>
           <div>
-            <span className="text-foreground">3D Web Creator<br></br>🎲</span>
+            <span className="text-foreground">3D Web Creator</span>
           </div>
         </h1>
 

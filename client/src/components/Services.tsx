@@ -103,15 +103,18 @@ export default function Services() {
                     className="absolute inset-0 backface-hidden bg-card/80 backdrop-blur-sm border border-card-border rounded-2xl p-6 flex flex-col justify-between"
                     style={{ backfaceVisibility: "hidden" }}
                   >
-                    <div className="flex justify-between items-start">
+                    {/* Icon at top center */}
+                    <div className="flex justify-center items-start relative">
                       <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center">
                         <Icon className="h-6 w-6 text-primary-foreground" />
                       </div>
+
+                      {/* Close button (if flipped) */}
                       {isFlipped && (
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-6 w-6"
+                          className="absolute top-0 right-0 h-6 w-6"
                           onClick={(e) => {
                             e.stopPropagation();
                             setFlippedCard(null);
@@ -122,16 +125,15 @@ export default function Services() {
                       )}
                     </div>
 
-                    <div className="mt-4 flex-1 flex flex-col justify-center">
+                    <div className="mt-6 flex-1 flex flex-col justify-center">
                       <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                      <p className="text-muted-foreground text-sm">
-                        {service.description}
-                      </p>
+                      <p className="text-muted-foreground text-sm">{service.description}</p>
                       <p className="text-xs text-muted-foreground/60 mt-2">
                         Click to learn more
                       </p>
                     </div>
                   </div>
+
 
                   {/* Back Side */}
                   <div

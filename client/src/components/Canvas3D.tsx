@@ -46,7 +46,7 @@ export default function Canvas3D() {
   return (
     <Canvas
       shadows
-      camera={{ fov: 45, position: [3, 2, 5] }}
+      camera={{ fov: 45, position: [3, -1, 5] }}
       className="rounded-xl w-full h-full"
     >
       <Suspense fallback={null}>
