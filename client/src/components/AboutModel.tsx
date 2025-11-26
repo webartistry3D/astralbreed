@@ -29,7 +29,7 @@ export default function AboutModel() {
 
       <Suspense fallback={null}>
         <Model />
-        <Environment preset="night" />
+        {/*<Environment files="night" />*/}
         <OrbitControls enableZoom={false} />
       </Suspense>
     </Canvas>

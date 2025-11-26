@@ -24,15 +24,15 @@ export default function Engineer2() {
   return (
     <Canvas camera={{ position: [6, 1, 8], fov: 45 }}>
       {/* Lighting */}
-      <ambientLight intensity={0.3} />
+      <ambientLight intensity={3} />
       <directionalLight position={[4, 4, 4]} intensity={1.1} />
 
       <Suspense fallback={null}>
         {/* 3D Model */}
         <Model />
 
-        {/* Environment preset */}
-        <Environment preset="city" />
+        {/* Environment preset 
+        <Environment preset="city" />*/}
 
         {/* Interactive controls */}
         <OrbitControls
