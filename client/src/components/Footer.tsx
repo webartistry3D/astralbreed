@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 const socialLinks = [
   { icon: Github, href: "https://github.com", label: "GitHub" },
   { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-  { icon: Mail, href: "mailto:hello@example.com", label: "Email" },
+  //{ icon: Twitter, href: "https://twitter.com", label: "Twitter" },
+  { icon: Mail, href: "mailto:webartistry.3d@gmail.com", label: "Email" },
 ];
 
 export default function Footer() {
