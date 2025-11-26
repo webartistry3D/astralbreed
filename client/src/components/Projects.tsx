@@ -8,7 +8,7 @@ import handymanImage from "@assets/generated_images/Handyman_Marketplace_App_UI_
 
 const projects = [
   {
-    title: "SME Operations Tool",
+    title: "SMETools",
     description: "A suite of tools used to automate daily SME operations and data workflows.",
     image: smeToolImage,
     fullDescription:
@@ -44,16 +44,15 @@ const projects = [
       "Handling large volumes of files efficiently while ensuring data integrity was critical. Implemented multi-threaded processing and checksum verification to ensure reliability and speed.",
   },
   {
-    title: "Handyman Marketplace App",
+    title: "Local Pro Services Hub",
     description: "A clean, fast service marketplace built with modern UI components.",
     image: handymanImage,
     fullDescription:
-      "A two-sided marketplace platform connecting homeowners with skilled handyman professionals. Features include service booking, real-time availability, secure payments, and review systems.",
+      "A two-sided marketplace platform connecting homeowners with skilled handyman and service professionals. Features include service booking, real-time availability, and review systems.",
     technologies: ["React", "Next.js", "Stripe", "Firebase", "Framer Motion"],
     features: [
       "Service provider profiles and portfolios",
       "Real-time booking system",
-      "Integrated payment processing",
       "Rating and review system",
       "Geolocation-based service matching",
       "Push notifications for bookings",
@@ -250,6 +249,7 @@ export default function Projects() {
 
                 {/* Buttons Section */}
                 <div className="flex flex-wrap gap-4 pt-4">
+                  {/* 
                   <Button className="gap-2">
                     <ExternalLink className="h-4 w-4" />
                     View Live Demo
@@ -257,7 +257,7 @@ export default function Projects() {
                   <Button variant="outline" className="gap-2">
                     <Github className="h-4 w-4" />
                     View Code
-                  </Button>
+                  </Button>*/}
                   {/* New Close Button */}
                   <Button
                     variant="secondary"
