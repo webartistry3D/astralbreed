@@ -32,7 +32,7 @@ function Model() {
   return (
     <primitive
       object={scene}
-      scale={5.1}              // Adjust size
+      scale={9}              // Adjust size
       position={[0, -1, 0]}  // Slightly lower
       rotation={[0, Math.PI / 4, 0]} // Initial rotation
     />
@@ -46,7 +46,7 @@ export default function Canvas3D() {
   return (
     <Canvas
       shadows
-      camera={{ fov: 45, position: [3, -1, 5] }}
+      camera={{ fov: 45, position: [9, -3, 10] }}
       className="rounded-xl w-full h-full"
     >
       <Suspense fallback={null}>

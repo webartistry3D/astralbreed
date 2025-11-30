@@ -29,6 +29,7 @@ export default function Hero() {
 
       {/* Hero Text */}
       <div className="max-w-7xl mx-auto px-6 md:px-8 py-12 text-center">
+        {/*
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6">
           <div>
             <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text">
@@ -41,7 +42,7 @@ export default function Hero() {
           <div>
             <span className="text-foreground">3D Web Creator</span>
           </div>
-        </h1>
+        </h1> */}
 
         <p className="text-md md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
           I build fast, modern web experiences and intelligent automation tools.

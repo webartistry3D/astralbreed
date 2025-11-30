@@ -16,24 +16,23 @@ export default function About() {
           {/* LEFT SIDE — TEXT */}
           <div className="space-y-6 text-base md:text-lg text-muted-foreground leading-relaxed">
             <p>
-              Hi! I'm <span className="text-foreground font-semibold">Kelechi Aribeana</span> — a
-              JavaScript Developer, Python Automation Engineer, and 3D Web Creator
-              with <span className="text-foreground font-semibold">3 years</span> of
-              hands-on experience helping SMEs, founders, and teams bring digital
-              ideas to life.
+              Hi. My name is <span className="text-foreground font-semibold">Kelechi Aribeana</span>.<br></br>
+              I'm a Full-stack Engineer, Python Automation Expert, and 3D Web Creator
+              with <span className="text-foreground font-semibold">3+ years</span> of
+              hands-on experience helping SMEs, founders, and teams bring ideas and
+              solutions to life.
             </p>
 
             <p>
               I specialize in building fast, modern, and interactive web
               applications, automating repetitive workflows, and creating
-              lightweight 3D experiences for the web.
+              immersive 3D experiences for the web.
             </p>
 
             <p>
-              I've delivered SME tools, including an Invoice Generator, SM Content Calendar Generator,
-              a Client Service Booking app, an Automated File Management bot, a Handyman Marketplace 
-              app, and crafted responsive UIs for startups and small businesses. I love turning ideas 
-              into real, functional, polished products. ✨
+              I've delivered a range of productivity tools that have helped entrepreneurs and SMEs
+              automate processes, streamline workflows and save <br></br>man-hours. I love turning ideas 
+              into real, functional, polished products. 🤩
             </p>
           </div>
 
