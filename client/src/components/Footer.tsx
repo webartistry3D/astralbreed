@@ -36,7 +36,7 @@ export default function Footer() {
           </div>
 
           <div className="text-center text-sm text-muted-foreground">
-            <p>© {new Date().getFullYear()} AstralBr33d 👽. Powered by WebArtistry Creations. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} AstraBr33d 👽. Powered by WebArtistry Creations. All rights reserved.</p>
           </div>
         </div>
       </div>
