@@ -60,8 +60,16 @@ function useIsMobile() {
   return isMobile;
 }
 
+interface ModelMeshProps {
+  index: number;
+  modelPath: string;
+  active: boolean;
+  onClick: () => void;
+}
+
+
 // ---------------- ModelMesh Component ----------------
-function ModelMesh({ index, modelPath, active, onClick }) {
+function ModelMesh({ index, modelPath, active, onClick }: ModelMeshProps) {
   const isMobile = useIsMobile();
   const group = useRef<THREE.Group>(null);
   const hoverRef = useRef(false);
@@ -100,6 +108,11 @@ function ModelMesh({ index, modelPath, active, onClick }) {
       THREE.MathUtils.lerp(group.current.scale.x, targetScale, 0.1)
     );
   });
+
+  skills.forEach(skill => {
+    useGLTF.preload(skill.model);
+  });
+
 
   return (
     <group

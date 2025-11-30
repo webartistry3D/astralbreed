@@ -10,8 +10,8 @@ const ServiceIsland = lazy(() => import("./ServiceIsland"));
 // GLB model paths
 const ISLAND_MODELS = [
   "/models/cyberpunk-bar.glb",     // Web App Development
-  "/models/cyberpunk-bar-1.glb",   // Automation & Python
-  "/models/cyberpunk-bar-2.glb",   // JS Development
+  "/models/cyberpunk-bar-1.glb",   // JS Development
+  "/models/cyberpunk-bar-2.glb",   // Automation & Python 
   "/models/cyberpunk-bar-3.glb",   // 3D Web Experiences
 ];
 
