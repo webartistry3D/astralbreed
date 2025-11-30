@@ -14,7 +14,7 @@ interface ServiceIslandProps {
 function IslandModel({
   file,
   scale = 1.5,
-  rotationSpeed = 0.002,        // subtle clockwise rotation
+  rotationSpeed = 0.006,        // subtle clockwise rotation
 }: ServiceIslandProps) {
   const ref = useRef<THREE.Group>(null);
   const gltf = useGLTF(file);

@@ -18,7 +18,7 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="relative min-h-screen flex flex-col items-center justify-start scroll-mt-20">
+    <section id="home" className="relative min-h-screen flex flex-col items-center bg-gray-800 justify-start scroll-mt-20">
       {/* Optional gradient background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5 -z-10" />
 
@@ -45,7 +45,7 @@ export default function Hero() {
         </h1> */}
 
         <p className="text-md md:text-xl text-muted-foreground max-w-2xl mx-auto mb-6">
-          I build fast, modern web experiences and intelligent automation tools.
+          I build and deploy fast, modern web experiences with JavaScript and intelligent automation tools with Python.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

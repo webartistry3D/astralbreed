@@ -1,5 +1,8 @@
-import { useState, useRef } from "react";
+"use client";
+
+import { useState, KeyboardEvent, useRef } from "react";
 import {
+  SiHtml5,
   SiJavascript,
   SiTypescript,
   SiReact,
@@ -11,96 +14,197 @@ import {
   SiThreedotjs,
   SiGit,
   SiFigma,
+  SiNodedotjs,
+  SiMongodb,
+  SiExpress,
 } from "react-icons/si";
 import { Plug, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Suspense, useEffect, useState as useReactState } from "react";
+import * as THREE from "three";
+import { useGLTF } from "@react-three/drei";
 
+// ---------------- Skill Data ----------------
 const skills = [
-  { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", description: "The core language of the web. I use modern JavaScript (ES6+) to build interactive user interfaces, handle complex logic, and create seamless user experiences. Proficient in async/await, promises, DOM manipulation, and modern JavaScript patterns." },
-  { name: "TypeScript", icon: SiTypescript, color: "#3178C6", description: "JavaScript with superpowers. TypeScript adds type safety and better tooling to JavaScript projects. I leverage TypeScript to catch bugs early, improve code maintainability, and enable better IDE support for faster development." },
-  { name: "React", icon: SiReact, color: "#61DAFB", description: "The leading frontend framework. I build scalable, component-based applications with React, utilizing hooks, context API, and modern patterns. Expert in state management, performance optimization, and creating reusable component libraries." },
-  { name: "Next.js", icon: SiNextdotjs, color: "#000000", description: "The React framework for production. I use Next.js for server-side rendering, static site generation, API routes, and optimized performance. Perfect for SEO-friendly applications and full-stack React projects." },
-  { name: "Python", icon: SiPython, color: "#3776AB", description: "Versatile and powerful automation language. I write Python scripts for data processing, automation, web scraping, and backend services. Experienced with pandas, requests, BeautifulSoup, and automation libraries." },
-  { name: "FastAPI", icon: SiFastapi, color: "#009688", description: "Modern, fast Python web framework. I build high-performance REST APIs with automatic documentation, type validation, and async support. Perfect for creating robust backend services and microservices." },
-  { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4", description: "Utility-first CSS framework. I use Tailwind to rapidly build custom designs without writing custom CSS. Expert in responsive design, dark mode, and creating consistent design systems with Tailwind." },
-  { name: "Vite", icon: SiVite, color: "#646CFF", description: "Next generation frontend tooling. Vite provides lightning-fast HMR and optimized builds. I use Vite for modern React projects, enjoying instant server start and blazing fast hot module replacement." },
-  { name: "Three.js", icon: SiThreedotjs, color: "#000000", description: "JavaScript 3D library. I create immersive 3D web experiences using Three.js, including interactive scenes, particle effects, 3D model rendering, and WebGL-powered visualizations." },
-  { name: "Git", icon: SiGit, color: "#F05032", description: "Version control essential. Proficient in Git workflows, branching strategies, pull requests, and collaborative development. I use Git to maintain clean commit history and manage complex codebases." },
-  { name: "Figma", icon: SiFigma, color: "#F24E1E", description: "Design and prototyping tool. I use Figma to collaborate with designers, create prototypes, and translate designs into pixel-perfect code. Skilled in component systems and design handoff workflows." },
-  { name: "API Integrations", icon: Plug, color: "#8B5CF6", description: "Connecting services seamlessly. Expert in integrating REST APIs, webhooks, and third-party services. I handle authentication, error handling, rate limiting, and ensure reliable communication between systems." },
+  { name: "HTML", icon: SiHtml5, color: "#E34F26", description: "Markup language for structuring web content", model: "/models/html.glb" },
+  { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4", description: "Utility-first CSS framework...", model: "/models/tailwind.glb" },
+  { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E", description: "The core language of the web...", model: "/models/javascript.glb" },
+  { name: "TypeScript", icon: SiTypescript, color: "#3178C6", description: "JavaScript with superpowers...", model: "/models/typescript.glb" },
+  { name: "React", icon: SiReact, color: "#61DAFB", description: "The leading frontend framework...", model: "/models/react.glb" },
+  { name: "Next.js", icon: SiNextdotjs, color: "#000000", description: "React framework for production...", model: "/models/nextjs.glb" },
+  { name: "Python", icon: SiPython, color: "#3776AB", description: "Versatile automation language...", model: "/models/python.glb" },
+  { name: "FastAPI", icon: SiFastapi, color: "#009688", description: "Modern, fast Python web framework...", model: "/models/fastapi.glb" },
+  { name: "Vite", icon: SiVite, color: "#646CFF", description: "Next-generation frontend tooling...", model: "/models/vite.glb" },
+  { name: "Three.js", icon: SiThreedotjs, color: "#000000", description: "JavaScript 3D library...", model: "/models/threejs.glb" },
+  { name: "Git", icon: SiGit, color: "#F05032", description: "Version control essential...", model: "/models/GitHub.glb" },
+  { name: "Figma", icon: SiFigma, color: "#F24E1E", description: "Design and prototyping tool...", model: "/models/figma.glb" },
+  { name: "API Integrations", icon: Plug, color: "#8B5CF6", description: "Connecting services seamlessly...", model: "/models/api.glb" },
+  { name: "Node.js", icon: SiNodedotjs, color: "#339933", description: "JavaScript runtime for server-side apps...", model: "/models/nodejs.glb" },
+  { name: "Express.js", icon: SiExpress, color: "#000000", description: "Minimal Node.js web framework...", model: "/models/express.glb" },
+  { name: "MongoDB", icon: SiMongodb, color: "#47A248", description: "NoSQL database for flexible data storage...", model: "/models/mongodb.glb" },
 ];
 
+// Hook: Responsive Detection
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useReactState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
+// ---------------- ModelMesh Component ----------------
+function ModelMesh({ index, modelPath, active, onClick }) {
+  const isMobile = useIsMobile();
+  const group = useRef<THREE.Group>(null);
+  const hoverRef = useRef(false);
+  const { scene } = useGLTF(modelPath);
+
+  // Responsive grid
+  const rows = 4;
+  const cols = 4;
+
+  const spacingX = isMobile ? 0.45 : 0.3;
+  const spacingY = isMobile ? 0.45 : 0.3;
+
+  const row = Math.floor(index / cols);
+  const col = index % cols;
+
+  const startX = ((cols - 1) * spacingX) / -2;
+  const startY = ((rows - 1) * spacingY) / 2;
+
+  const initialX = startX + col * spacingX;
+  const initialY = startY - row * spacingY;
+
+  const FLOAT_AMPLITUDE = 0.009;
+  const FLOAT_FREQUENCY = 2.0;
+
+  useFrame(({ clock }) => {
+    if (!group.current) return;
+    const t = clock.getElapsedTime();
+
+    // Floating effect
+    group.current.position.x = initialX;
+    group.current.position.y = initialY + Math.sin(t * FLOAT_FREQUENCY + index) * FLOAT_AMPLITUDE;
+
+    // Hover / active scaling
+    const targetScale = (active ? 1.15 : 1.0) * (hoverRef.current ? 1.1 : 1.0);
+    group.current.scale.setScalar(
+      THREE.MathUtils.lerp(group.current.scale.x, targetScale, 0.1)
+    );
+  });
+
+  return (
+    <group
+      ref={group}
+      position={[initialX, initialY, 0]}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        hoverRef.current = true;
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        hoverRef.current = false;
+      }}
+    >
+      <primitive object={scene.clone()} />
+    </group>
+  );
+}
+
+// ---------------- Main Skills Component ----------------
 export default function Skills() {
   const [activeSkill, setActiveSkill] = useState<number | null>(null);
+  const isMobile = useIsMobile();
 
   return (
     <section id="skills" className="py-16 md:py-24 lg:py-32 bg-background scroll-mt-20">
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">
-          Tech Stack
-        </h2>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">Tech Stack</h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6 md:gap-8 max-w-6xl mx-auto">
-          {skills.map((skill, index) => {
-            const Icon = skill.icon;
-            return (
-              <div key={index} className="relative">
-                {/* Grid Card */}
-                <motion.div
-                  layoutId={`card-${index}`}
-                  className="relative w-full h-40 md:h-48 flex flex-col items-center justify-center bg-card/50 border border-card-border rounded-2xl p-4 cursor-pointer hover:shadow-lg"
-                  onClick={() => setActiveSkill(index)}
-                >
-                  <Icon className="w-12 h-12" style={{ color: skill.color }} />
-                  <p className="text-sm font-medium text-center text-muted-foreground mt-2">
-                    {skill.name}
-                  </p>
-                </motion.div>
-
-                {/* Expanded Card */}
-                <AnimatePresence>
-                  {activeSkill === index && (
-                    <motion.div
-                      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4 sm:px-6"
-                      onClick={() => setActiveSkill(null)}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      <motion.div
-                        layoutId={`card-${index}`}
-                        className="relative w-full max-w-md sm:max-w-2xl md:max-w-3xl bg-card/95 backdrop-blur-md border border-card-border rounded-2xl p-6 flex flex-col cursor-pointer max-h-[90vh] overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        {/* Close Button */}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="absolute top-4 left-4"
-                          onClick={() => setActiveSkill(null)}
-                        >
-                          <X className="h-5 w-5" />
-                        </Button>
-
-                        {/* Icon & Name */}
-                        <div className="flex items-center gap-3 justify-center mb-4 mt-2">
-                          <Icon className="w-10 h-10" style={{ color: skill.color }} />
-                          <h3 className="text-xl md:text-2xl font-semibold">{skill.name}</h3>
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-                          {skill.description}
-                        </p>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
+        {/* Responsive Canvas Height */}
+        <div className={`w-full ${isMobile ? "h-[350px]" : "h-[500px]"} md:h-[600px] lg:h-[700px]`}>
+          <Canvas
+            camera={{
+              position: isMobile ? [0, 0, 10] : [0, 0, 6],
+              fov: isMobile ? 60 : 50,
+            }}
+            gl={{ antialias: true }}
+          >
+            <ambientLight intensity={0.6} />
+            <directionalLight intensity={0.8} position={[5, 5, 5]} />
+            <Suspense fallback={null}>
+              {skills.map((skill, index) => (
+                <ModelMesh
+                  key={index}
+                  index={index}
+                  modelPath={skill.model}
+                  active={activeSkill === index}
+                  onClick={() =>
+                    setActiveSkill(activeSkill === index ? null : index)
+                  }
+                />
+              ))}
+            </Suspense>
+          </Canvas>
         </div>
+
+        {/* Modal */}
+        <AnimatePresence>
+          {activeSkill !== null && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4 sm:px-6"
+              onClick={() => setActiveSkill(null)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="relative w-full max-w-xl bg-card p-6 rounded-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute top-4 left-4"
+                  onClick={() => setActiveSkill(null)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+
+                <div className="flex items-center gap-3 justify-center mb-4 mt-2">
+                  {(() => {
+                    const Icon = skills[activeSkill].icon;
+                    return (
+                      <Icon
+                        className="w-10 h-10"
+                        style={{ color: skills[activeSkill].color }}
+                      />
+                    );
+                  })()}
+                  <h3 className="text-xl font-semibold">
+                    {skills[activeSkill].name}
+                  </h3>
+                </div>
+
+                <p className="text-sm text-muted-foreground">
+                  {skills[activeSkill].description}
+                </p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
