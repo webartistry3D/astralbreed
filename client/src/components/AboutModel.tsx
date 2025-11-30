@@ -40,7 +40,7 @@ export default function AboutModel() {
       camera={{ position: [0, 1, 3], fov: 45 }}
       className="w-full h-full"
     >
-      <ambientLight intensity={0.04} />
+      <ambientLight intensity={1} />
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
 
       <Suspense fallback={null}>
