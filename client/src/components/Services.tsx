@@ -16,10 +16,10 @@ const ISLAND_MODELS = [
 ];
 
 const services = [
-  { icon: Code2, title: "Web App Development", description: "Modern, responsive UIs...", details: "Full-stack web app services..." },
+  { icon: Code2, title: "Web App Development", description: "Modern, responsive UIs...", details: "Expert UI/UX development..." },
+  { icon: Sparkles, title: "JavaScript Engineering", description: "High-quality frontend...", details: "Full-stack web app services..." },
   { icon: Cog, title: "Automation & Python", description: "Eliminate repetitive tasks...", details: "Custom Python automation..." },
-  { icon: Sparkles, title: "JavaScript Development", description: "High-quality frontend...", details: "Expert JS development..." },
-  { icon: Box, title: "3D Web Experiences", description: "Three.js visuals...", details: "Immersive 3D web experiences..." },
+  { icon: Box, title: "3D Web Creation", description: "Three.js visuals...", details: "Immersive 3D web experiences..." },
 ];
 
 export default function Services() {
