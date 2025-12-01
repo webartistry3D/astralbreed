@@ -69,11 +69,11 @@ export default function Services() {
                   >
                     <div className="w-full h-60 rounded-xl overflow-hidden">
                       <Suspense fallback={<div className="w-full h-full bg-gray-200 animate-pulse" />}>
-                        <ServiceIsland file={ISLAND_MODELS[index]} scale={1.6} />
+                        <ServiceIsland file={ISLAND_MODELS[index]} scale={1.6}  />
                       </Suspense>
                     </div>
 
-                    <div className="mt-4">
+                    <div className="mt-4 text-center">
                       <h3 className="text-lg font-semibold mb-1">{service.title}</h3>
                       <p className="text-muted-foreground text-sm">{service.description}</p>
                       <p className="text-xs text-muted-foreground/60 mt-1">Click to learn more</p>

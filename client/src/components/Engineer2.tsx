@@ -38,7 +38,7 @@ export default function Engineer2() {
         <OrbitControls
           enableZoom={false}       // allow zoom
           enablePan={true}        // allow panning
-          enableRotate={true}     // allow rotation
+          enableRotate={false}     // allow rotation
           maxPolarAngle={Math.PI} // vertical rotation limit
           minPolarAngle={0}
         />

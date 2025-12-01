@@ -32,7 +32,7 @@ export default function Skills() {
       <div className={`max-w-7xl mx-auto px-6 md:px-8 transition-all duration-300 ${active !== null ? "blur-sm pointer-events-none" : ""}`}>
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">Tools</h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-6">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
             return (
@@ -40,8 +40,8 @@ export default function Skills() {
                 key={index}
                 className="p-6 rounded-xl bg-card border shadow-sm cursor-pointer flex flex-col items-center gap-3"
                 onClick={() => setActive(index)}
-                whileHover={{ scale: 1.05 }}
-                transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+                whileHover={{ scale: 1.2 }}
+                transition={{ type: "tween", ease: "easeInOut", duration: 0.2 }}
               >
                 <Icon className="w-10 h-10" style={{ color: skill.color }} />
                 <p className="font-medium text-center">{skill.name}</p>
@@ -66,7 +66,7 @@ export default function Skills() {
               initial={{ scale: 0.5 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.5 }}
-              transition={{ type: "tween", ease: "easeInOut", duration: 0.4 }}
+              transition={{ type: "tween", ease: "easeInOut", duration: 0.2 }}
               onClick={() => setActive(null)}
             >
               {(() => {
