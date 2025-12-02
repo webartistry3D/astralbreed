@@ -100,7 +100,7 @@ export default function Services() {
                     <div className="mt-4 text-center">
                       <h3 className="text-lg font-semibold mb-1">{service.title}</h3>
                       <p className="text-muted-foreground text-sm">{service.description}</p>
-                      <p className="text-xs text-muted-foreground/60 mt-1">Click to learn more</p>
+                      <p className="text-xs text-muted-foreground/60 mt-1">Learn more</p>
                     </div>
                   </div>
 
