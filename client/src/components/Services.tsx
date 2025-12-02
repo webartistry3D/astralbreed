@@ -16,10 +16,34 @@ const ISLAND_MODELS = [
 ];
 
 const services = [
-  { icon: Code2, title: "Web App Development", description: "Modern, responsive UIs...", details: "Expert UI/UX development..." },
-  { icon: Sparkles, title: "JavaScript Engineering", description: "High-quality frontend...", details: "Full-stack web app services..." },
-  { icon: Cog, title: "Automation & Python", description: "Eliminate repetitive tasks...", details: "Custom Python automation..." },
-  { icon: Box, title: "3D Web Creation", description: "Three.js visuals...", details: "Immersive 3D web experiences..." },
+  {
+    icon: Code2,
+    title: "Web App Development",
+    description: "Modern, responsive UIs...",
+    details: "I build fast, reliable, and visually polished web apps tailored to your business goals. Every project includes responsive layouts, scalable architecture, and clean code, ensuring your product loads quickly, works on all devices, and is easy to maintain and grow."
+  },
+
+  {
+    icon: Sparkles,
+    title: "JavaScript Engineering",
+    description: "High-quality frontend...",
+    details: "From smooth animations to advanced component systems, I engineer high-performance JavaScript solutions that elevate user experience. I help modernize codebases, improve performance, and deliver robust frontend or full-stack features that scale effortlessly."
+  },
+
+  {
+    icon: Cog,
+    title: "Automation & Python",
+    description: "Eliminate repetitive tasks...",
+    details: "I design Python automation systems that save hours of manual work every week. Whether it's data processing, workflow automation, integrations, or smart dashboards, I build tools that reduce errors, speed up operations, and free your team to focus on what matters."
+  },
+
+  {
+    icon: Box,
+    title: "3D Web Creation",
+    description: "Three.js visuals...",
+    details: "Bring your brand to life with interactive 3D experiences built using Three.js and WebGL. I create responsive 3D models, dynamic scenes, micro-games, landing page visuals, and immersive product showcases optimized for performance and engagement."
+  }
+
 ];
 
 export default function Services() {
