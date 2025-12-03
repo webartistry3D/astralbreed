@@ -27,7 +27,7 @@ export default function CTA() {
 
           <Button
             size="lg"
-            className="text-base group bg-yellow-500 hover:bg-yellow-600 text-black"
+            className="text-base group bg-yellow-500 border-yellow-0 hover:bg-yellow-600 text-black"
             data-testid="button-contact"
           >
             <Mail className="mr-2 h-5 w-5" />

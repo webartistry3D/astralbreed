@@ -7,25 +7,25 @@ const services = [
     icon: Code2,
     title: "Web App Development",
     description:
-      "Modern and responsive web applications built with clean, scalable architecture—optimized for speed, accessibility, and long-term growth.",
+      "Transform your ideas into high-performance, modern web applications. I build responsive, scalable, and user-friendly platforms optimized for speed, accessibility, and long-term growth, so your users enjoy a seamless experience while your business thrives online.",
   },
   {
     icon: Sparkles,
     title: "JavaScript Engineering",
     description:
-      "High-quality frontend engineering with robust components, clean TypeScript, and optimized performance for interactive web experiences.",
+      "Delivering interactive, high-quality frontend solutions with clean TypeScript and robust components. I ensure optimized performance and smooth user experiences, turning complex web interfaces into intuitive, engaging digital products.",
   },
   {
     icon: Cog,
     title: "Automation & Python",
     description:
-      "Python-based automation systems that streamline workflows, process data, eliminate repetitive tasks, and reduce manual workload.",
+      "Streamline your workflows and eliminate repetitive tasks with intelligent Python-based automation. From data processing to task management, I reduce manual workload and increase efficiency, so your team can focus on what truly matters.",
   },
   {
     icon: Box,
     title: "3D Web Creation",
     description:
-      "Interactive 3D visuals, product showcases, and immersive experiences using Three.js and WebGL—fully optimized for smooth performance.",
+      "Bring your brand to life with immersive 3D web experiences. Using Three.js and WebGL, I create interactive product showcases, virtual environments, and stunning visuals, fully optimized for smooth, seamless performance across devices.",
   },
 ];
 

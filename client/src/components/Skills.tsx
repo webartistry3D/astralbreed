@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import * as Icons from "react-icons/si";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const skills = [
   {
@@ -199,100 +199,77 @@ const skills = [
   },
 ];
 
-
-
-
 export default function Skills() {
-  const [active, setActive] = useState<number | null>(null);
+  const [openStates, setOpenStates] = useState<boolean[]>(
+    Array(skills.length).fill(false)
+  );
+
+  const toggleSkill = (index: number) => {
+    setOpenStates((prev) => {
+      const newStates = [...prev];
+      newStates[index] = !newStates[index];
+      return newStates;
+    });
+  };
 
   return (
-    <section id="skills" className="py-16 md:py-24 lg:py-32 scroll-mt-20 bg-background relative">
-      {/* Grid */}
-      <div className={`max-w-7xl mx-auto px-6 md:px-8 transition-all duration-300 ${active !== null ? "blur-sm pointer-events-none" : ""}`}>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">Tools</h2>
+    <section id="skills" className="py-16 md:py-24 lg:py-32 bg-background scroll-mt-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-8">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12">
+          Skills
+        </h2>
 
-        <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
+            const isOpen = openStates[index];
+
             return (
-              <motion.div
+              <div
                 key={index}
-                className="p-6 rounded-xl bg-card border shadow-sm cursor-pointer flex flex-col items-center gap-3"
-                onClick={() => setActive(index)}
-                whileHover={{ scale: 1.2 }}
-                transition={{ type: "tween", ease: "easeInOut", duration: 0.2 }}
+                className="border border-card-border rounded-xl bg-card overflow-visible relative"
               >
-                <Icon className="w-10 h-10" style={{ color: skill.color }} />
-                <p className="font-medium text-center">{skill.name}</p>
-              </motion.div>
+                {/* Skill Header */}
+                <button
+                  onClick={() => toggleSkill(index)}
+                  className="w-full flex justify-between items-center p-4 cursor-pointer focus:outline-none relative z-10"
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-8 h-8 flex items-center justify-center rounded-md"
+                      style={{ color: skill.color }}
+                    >
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <span className="font-medium">{skill.name}</span>
+                  </div>
+                  {isOpen ? (
+                    <ChevronUp className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+
+                {/* Description Tray with smooth animation */}
+                <div
+                  className={`
+                    absolute left-0 right-0 top-full bg-card border-t border-card-border px-4 text-sm text-muted-foreground shadow-xl rounded-b-xl z-20
+                    transition-all duration-300 ease-in-out
+                    ${isOpen ? "max-h-[500px] py-4 opacity-100" : "max-h-0 py-0 opacity-0"}
+                    overflow-hidden
+                  `}
+                >
+                  {skill.description.map((line, idx) => (
+                    <p key={idx}>• {line}</p>
+                  ))}
+                </div>
+              </div>
             );
           })}
         </div>
       </div>
-
-      {/* Expanded Card */}
-      <AnimatePresence>
-        {active !== null && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActive(null)}
-          >
-            {/* SCALE WRAPPER (prevents layout glitch) */}
-            <motion.div
-              initial={{ scale: 0.85, opacity: 0 }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-                transition: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }
-              }}
-              exit={{
-                scale: 0.85,
-                opacity: 0,
-                transition: { duration: 0.25, ease: "easeInOut" }
-              }}
-              onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
-              className="max-w-md w-full"
-            >
-              {/* CARD CONTENT */}
-              <div className="bg-card rounded-2xl p-8 shadow-xl relative flex flex-col items-center text-center">
-                
-                {/* Close Button */}
-                <button
-                  onClick={() => setActive(null)}
-                  className="absolute top-3 right-3 text-xl text-muted-foreground hover:text-foreground transition"
-                >
-                  ×
-                </button>
-
-                {/* Icon */}
-                {(() => {
-                  const Icon = skills[active].icon;
-                  return (
-                    <Icon
-                      className="h-12 w-12 mb-4"
-                      style={{ color: skills[active].color }}
-                    />
-                  );
-                })()}
-
-                <h3 className="text-xl font-semibold mb-4">{skills[active].name}</h3>
-
-                {/* Bullet Point Description */}
-                <div className="text-left space-y-2">
-                  {skills[active].description.map((line, idx) => (
-                    <p key={idx} className="text-sm text-muted-foreground">
-                      • {line}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }
+
+
