@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { X, ExternalLink, Github } from "lucide-react";
+import { X } from "lucide-react";
 import smeToolImage from "@assets/generated_images/SME_Operations_Tool_Dashboard_e5c8c72c.png";
 import fileManagementImage from "@assets/generated_images/File_Management_Automation_Interface_af0f96bf.png";
 import handymanImage from "@assets/generated_images/Handyman_Marketplace_App_UI_f8879244.png";
@@ -12,60 +12,66 @@ const projects = [
     description: "A suite of tools used to automate daily SME operations and data workflows.",
     image: smeToolImage,
     fullDescription:
-      "A comprehensive operations management platform designed specifically for small and medium enterprises. This tool streamlines daily business operations by automating data workflows, generating reports, and providing real-time insights into business metrics.",
+      "A comprehensive operations management platform designed specifically for small and medium enterprises. This tool streamlines business operations by automating workflows, generating reports, and providing real-time insights.",
     technologies: ["React", "TypeScript", "Node.js", "PostgreSQL", "Tailwind CSS"],
     features: [
-      "Automated data workflow processing",
+      "Automated workflow processing",
       "Real-time dashboard analytics",
       "Custom report generation",
       "User role management",
-      "Integration with third-party APIs",
+      "API integrations",
       "Mobile-responsive design",
     ],
     challenges:
-      "The main challenge was creating a flexible system that could adapt to different business workflows while maintaining performance with large datasets. Solved this by implementing efficient data caching strategies and modular architecture.",
+      "Creating a flexible system that works for different workflows while maintaining performance. Solved using caching & modular architecture.",
   },
   {
     title: "File Management Automation Script",
     description: "Python-based automation that reduced hours of manual work to minutes.",
     image: fileManagementImage,
     fullDescription:
-      "An intelligent file management system that automates the organization, processing, and archival of files. The script uses Python to monitor directories, classify files based on content and metadata, and execute automated workflows.",
+      "An automation system that organizes, processes, and archives files. Uses content classification, metadata analysis, and automated directory management.",
     technologies: ["Python", "FastAPI", "Pandas", "SQLite", "Celery"],
     features: [
-      "Automatic file classification and tagging",
-      "Scheduled file processing tasks",
-      "Duplicate detection and removal",
-      "Batch file operations",
-      "Email notifications for completed tasks",
-      "Comprehensive logging system",
+      "Automatic file classification",
+      "Scheduled processing tasks",
+      "Duplicate detection",
+      "Batch operations",
+      "Email notifications",
+      "Full logging system",
     ],
     challenges:
-      "Handling large volumes of files efficiently while ensuring data integrity was critical. Implemented multi-threaded processing and checksum verification to ensure reliability and speed.",
+      "Efficiently processing large file batches while maintaining accuracy. Solved with threading and checksum validation.",
   },
   {
     title: "Local Pro Services Hub",
-    description: "A clean, fast service marketplace built with modern UI components.",
+    description: "A fast, clean service marketplace built with modern UI components.",
     image: handymanImage,
     fullDescription:
-      "A two-sided marketplace platform connecting homeowners with skilled handyman and service professionals. Features include service booking, real-time availability, and review systems.",
-    technologies: ["React", "Next.js", "Form Handling", "GitHub", "Framer Motion"],
+      "A two-sided marketplace connecting homeowners with service professionals. Includes booking, profiles, portfolios, and review systems.",
+    technologies: ["React", "Next.js", "Form Handling", "GitHub"],
     features: [
-      "Service provider profiles and portfolios",
+      "Provider profiles",
       "Real-time booking system",
-      "Rating and review system",
-      "Geolocation-based service matching",
-      "Push notifications for bookings",
+      "Rating & review system",
+      "Location-based matching",
+      "Push notifications",
     ],
     challenges:
-      "Creating a seamless booking experience while handling real-time availability updates was complex. Implemented optimistic UI updates and WebSocket connections for instant synchronization.",
+      "Maintaining real-time availability syncing. Solved using optimistic UI and WebSocket updates.",
   },
 ];
 
-function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClose: () => void }) {
+function ProjectModal({
+  project,
+  onClose,
+}: {
+  project: typeof projects[0];
+  onClose: () => void;
+}) {
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-[9999] bg-black/40 overflow-y-auto"
       onClick={onClose}
     >
       <div className="flex justify-center p-4 md:p-8">
@@ -73,7 +79,7 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
           className="relative w-full max-w-5xl bg-card border border-card-border rounded-2xl shadow-xl overflow-hidden flex flex-col mt-12 mb-12"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Image with Close Button */}
+          {/* Image Section */}
           <div className="relative aspect-video overflow-hidden bg-muted">
             <img
               src={project.image}
@@ -84,14 +90,14 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-background rounded-full"
+              className="absolute top-4 right-4 bg-background/80 rounded-full"
               onClick={onClose}
             >
               <X className="h-6 w-6" />
             </Button>
           </div>
 
-          {/* Content */}
+          {/* Content Section */}
           <div className="p-6 md:p-10 space-y-6 max-h-[80vh] overflow-y-auto">
             <h2 className="text-3xl md:text-4xl font-bold">{project.title}</h2>
             <p className="text-muted-foreground">{project.fullDescription}</p>
@@ -124,26 +130,22 @@ function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClo
 
             <div>
               <h3 className="text-xl font-semibold mb-2">Challenges & Solutions</h3>
-              <p className="text-muted-foreground leading-relaxed">{project.challenges}</p>
+              <p className="text-muted-foreground leading-relaxed">
+                {project.challenges}
+              </p>
             </div>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Button className="gap-2">
-                <ExternalLink className="h-4 w-4" />
-                View Live Demo
-              </Button>
-              <Button variant="outline" className="gap-2">
-                <Github className="h-4 w-4" />
-                View Code
-              </Button>
-            </div>
+            {/* Close Button */}
+            <Button variant="secondary" className="gap-2" onClick={onClose}>
+              <X className="h-4 w-4" />
+              Close
+            </Button>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
 
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
@@ -162,16 +164,17 @@ export default function Projects() {
           {projects.map((project, index) => (
             <Card
               key={index}
-              className="overflow-hidden hover:scale-105 transition-all duration-300 bg-card/50 backdrop-blur-sm border-card-border hover-elevate group cursor-pointer"
+              className="overflow-hidden bg-card/50 border-card-border cursor-pointer"
               onClick={() => setSelectedProject(index)}
             >
               <div className="aspect-video overflow-hidden bg-muted">
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover"
                 />
               </div>
+
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
                 <p className="text-muted-foreground">{project.description}</p>
@@ -182,96 +185,12 @@ export default function Projects() {
         </div>
       </div>
 
+      {/* Modal */}
       {selectedProject !== null && (
-        <div
-          className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm overflow-y-auto"
-          onClick={() => setSelectedProject(null)}
-        >
-          <div className="flex justify-center p-4 md:p-8">
-            <div
-              className="relative w-full max-w-5xl bg-card border border-card-border rounded-2xl shadow-xl overflow-hidden flex flex-col mt-12 mb-12"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Image Section */}
-              <div className="relative aspect-video overflow-hidden bg-muted">
-                <img
-                  src={projects[selectedProject].image}
-                  alt={projects[selectedProject].title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                {/* Top-Right Close Button */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-background rounded-full"
-                  onClick={() => setSelectedProject(null)}
-                >
-                  <X className="h-6 w-6" />
-                </Button>
-              </div>
-
-              {/* Project Details */}
-              <div className="p-6 md:p-10 space-y-6 max-h-[80vh] overflow-y-auto">
-                <h2 className="text-3xl md:text-4xl font-bold">{projects[selectedProject].title}</h2>
-                <p className="text-muted-foreground">{projects[selectedProject].fullDescription}</p>
-
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Technologies Used</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {projects[selectedProject].technologies.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Key Features</h3>
-                  <ul className="grid md:grid-cols-2 gap-2">
-                    {projects[selectedProject].features.map((feature, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-primary mt-1">✓</span>
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">Challenges & Solutions</h3>
-                  <p className="text-muted-foreground leading-relaxed">{projects[selectedProject].challenges}</p>
-                </div>
-
-                {/* Buttons Section */}
-                <div className="flex flex-wrap gap-4 pt-4">
-                  {/* 
-                  <Button className="gap-2">
-                    <ExternalLink className="h-4 w-4" />
-                    View Live Demo
-                  </Button>
-                  <Button variant="outline" className="gap-2">
-                    <Github className="h-4 w-4" />
-                    View Code
-                  </Button>*/}
-                  {/* New Close Button */}
-                  <Button
-                    variant="secondary"
-                    className="gap-2"
-                    onClick={() => setSelectedProject(null)}
-                  >
-                    <X className="h-4 w-4" />
-                    Close
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProjectModal
+          project={projects[selectedProject]}
+          onClose={() => setSelectedProject(null)}
+        />
       )}
     </section>
   );
