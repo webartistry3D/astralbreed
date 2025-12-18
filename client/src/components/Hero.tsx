@@ -67,7 +67,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-12 text-center">
         <div className="h-[60px] md:h-[80px] flex items-start justify-center">
           <TypingText
-            text={`Building systems that make sense of complexity and unlock people.`}
+            text={`Building systems that simplify complexity and unlock people.`}
             speed={100}
             onComplete={handleTypingComplete}
           />
