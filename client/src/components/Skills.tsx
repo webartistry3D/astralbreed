@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import * as Icons from "react-icons/si";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { X } from "lucide-react";
 
+/* ---------------------------------------------
+   DATA (unchanged, reused – no duplication)
+---------------------------------------------- */
 const skills = [
   {
     name: "HTML",
@@ -199,77 +203,201 @@ const skills = [
   },
 ];
 
-export default function Skills() {
-  const [openStates, setOpenStates] = useState<boolean[]>(
-    Array(skills.length).fill(false)
-  );
+/* ---------------------------------------------
+   CONSTANTS
+---------------------------------------------- */
+const CARD_WIDTH = 180;
+const GAP = 24;
+const SPEED = 40; // px/sec
 
-  const toggleSkill = (index: number) => {
-    setOpenStates((prev) => {
-      const newStates = [...prev];
-      newStates[index] = !newStates[index];
-      return newStates;
-    });
-  };
+/* ---------------------------------------------
+   SKILLS SECTION (Root)
+---------------------------------------------- */
+export default function Skills() {
+  const [activeSkill, setActiveSkill] = useState<typeof skills[number] | null>(null);
 
   return (
-    <section id="skills" className="py-16 md:py-24 lg:py-32 bg-background scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-12">
-          Skills
-        </h2>
+    <section
+      id="skills"
+      className="relative py-24 overflow-hidden bg-background"
+    >
+      <h2 className="text-center text-4xl font-bold mb-12">
+        Skills
+      </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-          {skills.map((skill, index) => {
-            const Icon = skill.icon;
-            const isOpen = openStates[index];
+      <SkillsCarousel onSelect={setActiveSkill} />
 
-            return (
-              <div
-                key={index}
-                className="border border-card-border rounded-xl bg-card overflow-visible relative"
-              >
-                {/* Skill Header */}
-                <button
-                  onClick={() => toggleSkill(index)}
-                  className="w-full flex justify-between items-center p-4 cursor-pointer focus:outline-none relative z-10"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-8 h-8 flex items-center justify-center rounded-md"
-                      style={{ color: skill.color }}
-                    >
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="font-medium">{skill.name}</span>
-                  </div>
-                  {isOpen ? (
-                    <ChevronUp className="w-5 h-5 text-muted-foreground" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-muted-foreground" />
-                  )}
-                </button>
-
-                {/* Description Tray with smooth animation */}
-                <div
-                  className={`
-                    absolute left-0 right-0 top-full bg-card border-t border-card-border px-4 text-sm text-muted-foreground shadow-xl rounded-b-xl z-20
-                    transition-all duration-300 ease-in-out
-                    ${isOpen ? "max-h-[500px] py-4 opacity-100" : "max-h-0 py-0 opacity-0"}
-                    overflow-hidden
-                  `}
-                >
-                  {skill.description.map((line, idx) => (
-                    <p key={idx}>• {line}</p>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <AnimatePresence>
+        {activeSkill && (
+          <>
+            <Backdrop onClose={() => setActiveSkill(null)} />
+            <ExpandedSkillCard
+              skill={activeSkill}
+              onClose={() => setActiveSkill(null)}
+            />
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
 
+/* ---------------------------------------------
+   CAROUSEL
+   - Infinite transform-based loop
+---------------------------------------------- */
+function SkillsCarousel({
+  onSelect,
+}: {
+  onSelect: (skill: typeof skills[number]) => void;
+}) {
+  const shouldReduceMotion = useReducedMotion();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
 
+  // Measure once (stable loop distance)
+  useEffect(() => {
+    if (!containerRef.current) return;
+    setWidth(
+      (CARD_WIDTH + GAP) * skills.length
+    );
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden">
+      <motion.div
+        ref={containerRef}
+        className="flex gap-6 will-change-transform"
+        animate={
+          shouldReduceMotion
+            ? {}
+            : { x: [-width, 0] }
+        }
+        transition={{
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "linear",
+          duration: width / SPEED,
+        }}
+      >
+        {[...skills, ...skills].map((skill, i) => (
+          <SkillCard
+            key={`${skill.name}-${i}`}
+            skill={skill}
+            onClick={() => onSelect(skill)}
+          />
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ---------------------------------------------
+   SKILL CARD (Loop State)
+---------------------------------------------- */
+function SkillCard({
+  skill,
+  onClick,
+}: {
+  skill: typeof skills[number];
+  onClick: () => void;
+}) {
+  const Icon = skill.icon;
+
+  return (
+    <motion.button
+      layoutId={`skill-${skill.name}`}
+      onClick={onClick}
+      className="flex-shrink-0 w-[180px] h-[120px]
+                 rounded-xl border border-card-border
+                 bg-card flex flex-col items-center
+                 justify-center gap-3
+                 hover:scale-[1.03]
+                 focus:outline-none"
+      style={{ color: skill.color }}
+      whileHover={{ scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 300, damping: 25 }}
+    >
+      <Icon className="w-10 h-10" />
+      <span className="font-medium text-sm text-foreground">
+        {skill.name}
+      </span>
+    </motion.button>
+  );
+}
+
+/* ---------------------------------------------
+   EXPANDED CARD (Shared Layout)
+---------------------------------------------- */
+function ExpandedSkillCard({
+  skill,
+  onClose,
+}: {
+  skill: typeof skills[number];
+  onClose: () => void;
+}) {
+  const Icon = skill.icon;
+
+  // Esc key support
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <motion.div
+      layoutId={`skill-${skill.name}`}
+      className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+    >
+      <motion.div
+        className="pointer-events-auto w-[90vw] max-w-xl
+                   rounded-2xl bg-card p-8
+                   shadow-2xl relative"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4"
+          aria-label="Close"
+        >
+          <X />
+        </button>
+
+        <div
+          className="flex items-center gap-4 mb-6"
+          style={{ color: skill.color }}
+        >
+          <Icon className="w-12 h-12" />
+          <h3 className="text-2xl font-bold">
+            {skill.name}
+          </h3>
+        </div>
+
+        <ul className="space-y-2 text-muted-foreground">
+          {skill.description.map((line, i) => (
+            <li key={i}>• {line}</li>
+          ))}
+        </ul>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* ---------------------------------------------
+   BACKDROP
+---------------------------------------------- */
+function Backdrop({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    />
+  );
+}

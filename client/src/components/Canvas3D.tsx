@@ -13,10 +13,12 @@ function Model() {
   useEffect(() => {
     if (actions) {
       Object.values(actions).forEach((action) => {
-        action.reset();                 // reset to start
-        action.play();                  // start animation
-        action.setLoop(THREE.LoopRepeat, Infinity); // loop forever
-        action.timeScale = 1;           // optional speed control
+        if (action) {
+          action.reset();                 // reset to start
+          action.play();                  // start animation
+          action.setLoop(THREE.LoopRepeat, Infinity); // loop forever
+          action.timeScale = 1;           // optional speed control
+        }
       });
     }
   }, [actions]);

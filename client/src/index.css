@@ -286,3 +286,66 @@
     inset: -1px;
   }
 }
+
+/* -------------------------------------------
+   CINEMATIC FULL-PAGE SCROLL SYSTEM
+   ------------------------------------------- */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: auto; /* Lenis handles smoothness */
+  overscroll-behavior: none;
+}
+
+/* Enables full-screen section snapping */
+body {
+  scroll-snap-type: y mandatory;
+}
+
+/* Every cinematic section will snap in place */
+section {
+  scroll-snap-align: start;
+}
+
+/* Cartoonish Pop-Out Animations */
+@keyframes popOut {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popOutDelayed {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hero-button-hire {
+  animation: popOut 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-origin: center;
+}
+
+.hero-button-projects {
+  animation: popOutDelayed 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: 0.4s;
+  transform-origin: center;
+  opacity: 0;
+}

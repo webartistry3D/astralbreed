@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
 
-import Engineer1 from "./Engineer1";
-import Engineer2 from "./Engineer2";
+//import Engineer1 from "./Engineer1";
+//import Engineer2 from "./Engineer2";
 
 export default function CTA() {
   return (
@@ -37,15 +37,17 @@ export default function CTA() {
 
         {/* 3D MODELS — positioned behind the text */}
         <div className="absolute inset-0 flex justify-between items-center pointer-events-none">
-          {/* LEFT MODEL */}
+          {/* LEFT MODEL 
           <div className="w-[25%] min-w-[120px] h-60 md:h-72 lg:h-80">
             <Engineer1 />
           </div>
+          */}
 
-          {/* RIGHT MODEL */}
+          {/* RIGHT MODEL 
           <div className="w-[25%] min-w-[120px] h-60 md:h-72 lg:h-80">
             <Engineer2 />
           </div>
+          */}
         </div>
 
       </div>
