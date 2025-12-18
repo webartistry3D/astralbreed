@@ -70,6 +70,7 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-2 md:gap-4 z-[101]">
+              {/*
               <Button
                 variant="ghost"
                 size="icon"
@@ -83,6 +84,7 @@ export default function Header() {
                   <Moon className="h-5 w-5" />
                 )}
               </Button>
+              */}
 
               <Button
                 variant="ghost"

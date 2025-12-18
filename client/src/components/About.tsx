@@ -64,11 +64,11 @@ export default function About() {
 
         <div className="max-w-3xl mx-auto space-y-6 text-base md:text-lg text-gray-200 leading-relaxed">
           <p data-aos="fade-up" data-aos-delay={250}>
-            I'm a Full-stack Web Developer, Python Automation Specialist, and 3D Web Creator with 3+ years 
+            I'm a Full-stack Engineer, Python Automation Specialist, and Web3D Creator with 3+ years 
             experience building and deploying web solutions for founders, SMEs, and teams.
           </p>
           <p data-aos="fade-up" data-aos-delay={350}>
-            I specialize in building modern web applications, automating workflows, and creating fully immersive web experiences.
+            I specialize in building web and mobile applications, automating workflows, and creating fully immersive web experiences.
           </p>
           <p data-aos="fade-up" data-aos-delay={450}>
             I've delivered productivity tools that help businesses streamline workflows, automate processes, save man-hours, and generate more revenue. I love what I do - turning ideas into functional, polished products! ✨
