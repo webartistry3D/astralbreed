@@ -1,5 +1,3 @@
-"use client";
-
 import { Canvas } from "@react-three/fiber";
 import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
@@ -17,10 +15,14 @@ interface Primitive {
   id: number;
 }
 
+interface RainingPrimitivesProps {
+  className?: string; // allow passing a className
+}
+
 const COLORS = ["#00d4ff", "#ffff00", "#ff00ff"]; // cyan, yellow, magenta
 const SHAPES: ShapeType[] = ["box", "torus", "sphere", "tetrahedron"];
 
-export default function RainingPrimitives() {
+export default function RainingPrimitives({ className }: RainingPrimitivesProps) {
   const [primitives, setPrimitives] = useState<Primitive[]>([]);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ export default function RainingPrimitives() {
           Math.random() * Math.PI,
           Math.random() * Math.PI
         ),
-        speed: Math.random() * 0.05 + 0.01,
+        speed: Math.random() * 0.1 + 0.02,
         scale: Math.random() * 1.5 + 0.3,
         shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
@@ -53,13 +55,13 @@ export default function RainingPrimitives() {
   return (
     <Canvas
       camera={{ position: [0, 10, 25], fov: 50 }}
-      className="absolute inset-0 -z-10"
+      className={className} // forward the className here
     >
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 20, 10]} intensity={1} />
 
-      {primitives.map((prim, index) => (
-        <PrimitiveMesh key={index} primitive={prim} />
+      {primitives.map((prim) => (
+        <PrimitiveMesh key={prim.id} primitive={prim} />
       ))}
     </Canvas>
   );
@@ -71,29 +73,23 @@ function PrimitiveMesh({ primitive }: { primitive: Primitive }) {
 
   useEffect(() => {
     let frame: number;
-    const LIFETIME = 30000; // 30 seconds in milliseconds
-    const FADE_START = 25000; // Start fading at 25 seconds
-    
+    const LIFETIME = 30000;
+    const FADE_START = 25000;
+
     const animate = () => {
       if (meshRef.current) {
         meshRef.current.position.y -= primitive.speed;
-        meshRef.current.rotation.x += 0.001;
-        meshRef.current.rotation.y += 0.001;
+        meshRef.current.rotation.x += 0.01;
+        meshRef.current.rotation.y += 0.01;
 
-        // Calculate age and opacity
         const age = Date.now() - primitive.createdAt;
         if (age >= FADE_START) {
-          // Fade out in last 5 seconds
           const fadeProgress = (age - FADE_START) / (LIFETIME - FADE_START);
           setOpacity(Math.max(0, 0.3 * (1 - fadeProgress)));
         }
 
-        // reset to top when below, but keep alive for 30 seconds
-        if (meshRef.current.position.y < -5) {
-          const age = Date.now() - primitive.createdAt;
-          if (age < LIFETIME) {
-            meshRef.current.position.y = Math.random() * 20 + 10;
-          }
+        if (meshRef.current.position.y < -5 && age < LIFETIME) {
+          meshRef.current.position.y = Math.random() * 20 + 10;
         }
       }
       frame = requestAnimationFrame(animate);

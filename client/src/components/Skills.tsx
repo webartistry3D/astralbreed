@@ -1,3 +1,6 @@
+
+
+
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -6,7 +9,7 @@ import * as Icons from "react-icons/si";
 import { X } from "lucide-react";
 
 /* ---------------------------------------------
-   DATA (unchanged, reused – no duplication)
+   DATA (unchanged)
 ---------------------------------------------- */
 const skills = [
   {
@@ -141,6 +144,19 @@ const skills = [
       "I use Git to ensure code integrity, team collaboration, and smooth deployment pipelines."
     ],
   },
+    {
+    name: "GitHub",
+    icon: Icons.SiGithub,
+    color: "#181717",
+    github: "https://github.com/yourusername",
+    description: [
+      "Web-based platform for version control and collaborative software development.",
+      "Hosts Git repositories, enabling team collaboration and project management.",
+      "Supports branching, pull requests, and code review workflows.",
+      "Integrates with CI/CD pipelines, issue tracking, and project boards.",
+      "I use GitHub to manage code, collaborate with teams, and maintain reliable, versioned projects."
+    ],
+  },
   {
     name: "Figma",
     icon: Icons.SiFigma,
@@ -206,24 +222,19 @@ const skills = [
 /* ---------------------------------------------
    CONSTANTS
 ---------------------------------------------- */
-const CARD_WIDTH = 180;
+const BASE_CARD_WIDTH = 180;
 const GAP = 24;
-const SPEED = 40; // px/sec
+const SPEED = 100; // px/sec
 
 /* ---------------------------------------------
-   SKILLS SECTION (Root)
+   SKILLS SECTION
 ---------------------------------------------- */
 export default function Skills() {
   const [activeSkill, setActiveSkill] = useState<typeof skills[number] | null>(null);
 
   return (
-    <section
-      id="skills"
-      className="relative py-24 overflow-hidden bg-background"
-    >
-      <h2 className="text-center text-4xl font-bold mb-12">
-        Skills
-      </h2>
+    <section id="skills" className="relative py-24 overflow-hidden bg-background">
+      <h2 className="text-center text-4xl font-bold mb-12">Skills</h2>
 
       <SkillsCarousel onSelect={setActiveSkill} />
 
@@ -231,10 +242,7 @@ export default function Skills() {
         {activeSkill && (
           <>
             <Backdrop onClose={() => setActiveSkill(null)} />
-            <ExpandedSkillCard
-              skill={activeSkill}
-              onClose={() => setActiveSkill(null)}
-            />
+            <ExpandedSkillCard skill={activeSkill} onClose={() => setActiveSkill(null)} />
           </>
         )}
       </AnimatePresence>
@@ -244,23 +252,27 @@ export default function Skills() {
 
 /* ---------------------------------------------
    CAROUSEL
-   - Infinite transform-based loop
 ---------------------------------------------- */
 function SkillsCarousel({
   onSelect,
 }: {
   onSelect: (skill: typeof skills[number]) => void;
 }) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = Boolean(useReducedMotion());
   const containerRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(0);
+  const [totalWidth, setTotalWidth] = useState(0);
+  const [cardWidth, setCardWidth] = useState(BASE_CARD_WIDTH);
 
-  // Measure once (stable loop distance)
+  // Responsive width calculation
   useEffect(() => {
-    if (!containerRef.current) return;
-    setWidth(
-      (CARD_WIDTH + GAP) * skills.length
-    );
+    const calculateWidth = () => {
+      const scaleFactor = Math.min(window.innerWidth / 1280, 1); // scale down on smaller screens
+      setCardWidth(BASE_CARD_WIDTH * scaleFactor);
+      setTotalWidth((BASE_CARD_WIDTH * scaleFactor + GAP) * skills.length);
+    };
+    calculateWidth();
+    window.addEventListener("resize", calculateWidth);
+    return () => window.removeEventListener("resize", calculateWidth);
   }, []);
 
   return (
@@ -271,20 +283,25 @@ function SkillsCarousel({
         animate={
           shouldReduceMotion
             ? {}
-            : { x: [-width, 0] }
+            : { x: [-totalWidth, 0] }
         }
         transition={{
           repeat: Infinity,
           repeatType: "loop",
           ease: "linear",
-          duration: width / SPEED,
+          duration: totalWidth / SPEED,
         }}
       >
+        {/* Duplicate array for infinite loop */}
         {[...skills, ...skills].map((skill, i) => (
           <SkillCard
             key={`${skill.name}-${i}`}
             skill={skill}
+            //index={i}
+            layoutId={`skill-${skill.name}-${i}`} // safe layoutId
             onClick={() => onSelect(skill)}
+            shouldReduceMotion={shouldReduceMotion}
+            cardWidth={cardWidth}
           />
         ))}
       </motion.div>
@@ -293,41 +310,40 @@ function SkillsCarousel({
 }
 
 /* ---------------------------------------------
-   SKILL CARD (Loop State)
+   SKILL CARD
 ---------------------------------------------- */
 function SkillCard({
   skill,
   onClick,
+  layoutId,
+  shouldReduceMotion,
+  cardWidth,
 }: {
   skill: typeof skills[number];
   onClick: () => void;
+  layoutId: string;
+  shouldReduceMotion: boolean;
+  cardWidth: number;
 }) {
   const Icon = skill.icon;
 
   return (
     <motion.button
-      layoutId={`skill-${skill.name}`}
+      layoutId={layoutId}
       onClick={onClick}
-      className="flex-shrink-0 w-[180px] h-[120px]
-                 rounded-xl border border-card-border
-                 bg-card flex flex-col items-center
-                 justify-center gap-3
-                 hover:scale-[1.03]
-                 focus:outline-none"
-      style={{ color: skill.color }}
-      whileHover={{ scale: 1.05 }}
+      className="flex-shrink-0 h-[120px] rounded-xl border border-card-border bg-card flex flex-col items-center justify-center gap-3 focus:outline-none"
+      style={{ color: skill.color, width: cardWidth }}
+      whileHover={!shouldReduceMotion ? { scale: 1.05 } : {}}
       transition={{ type: "spring", stiffness: 300, damping: 25 }}
     >
       <Icon className="w-10 h-10" />
-      <span className="font-medium text-sm text-foreground">
-        {skill.name}
-      </span>
+      <span className="font-medium text-sm text-foreground">{skill.name}</span>
     </motion.button>
   );
 }
 
 /* ---------------------------------------------
-   EXPANDED CARD (Shared Layout)
+   EXPANDED SKILL CARD
 ---------------------------------------------- */
 function ExpandedSkillCard({
   skill,
@@ -338,7 +354,6 @@ function ExpandedSkillCard({
 }) {
   const Icon = skill.icon;
 
-  // Esc key support
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
@@ -347,13 +362,11 @@ function ExpandedSkillCard({
 
   return (
     <motion.div
-      layoutId={`skill-${skill.name}`}
+      layoutId={`skill-${skill.name}`} // single expanded layout
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
     >
       <motion.div
-        className="pointer-events-auto w-[90vw] max-w-xl
-                   rounded-2xl bg-card p-8
-                   shadow-2xl relative"
+        className="pointer-events-auto w-[90vw] max-w-xl rounded-2xl bg-card p-8 shadow-2xl relative"
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
@@ -361,20 +374,15 @@ function ExpandedSkillCard({
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4"
+          className="absolute top-4 right-4 p-1 rounded hover:bg-black/10"
           aria-label="Close"
         >
           <X />
         </button>
 
-        <div
-          className="flex items-center gap-4 mb-6"
-          style={{ color: skill.color }}
-        >
+        <div className="flex items-center gap-4 mb-6" style={{ color: skill.color }}>
           <Icon className="w-12 h-12" />
-          <h3 className="text-2xl font-bold">
-            {skill.name}
-          </h3>
+          <h3 className="text-2xl font-bold">{skill.name}</h3>
         </div>
 
         <ul className="space-y-2 text-muted-foreground">
@@ -382,6 +390,17 @@ function ExpandedSkillCard({
             <li key={i}>• {line}</li>
           ))}
         </ul>
+
+        {skill.github && (
+          <a
+            href={skill.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block text-primary hover:underline"
+          >
+            GitHub Repo
+          </a>
+        )}
       </motion.div>
     </motion.div>
   );
