@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { X, ExternalLink, Github } from "lucide-react";
-import { motion } from "framer-motion";
+import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import smeToolImage from "@assets/generated_images/SME_Operations_Tool_Dashboard_e5c8c72c.png";
 import fileManagementImage from "@assets/generated_images/File_Management_Automation_Interface_af0f96bf.png";
 import handymanImage from "@assets/generated_images/Handyman_Marketplace_App_UI_f8879244.png";
@@ -26,7 +26,7 @@ const projects = [
       "Mobile-responsive design",
     ],
     challenges:
-      "The main challenge was creating a flexible system that could adapt to different business workflows while maintaining performance with large datasets. Solved this by implementing efficient data caching strategies and modular architecture.",
+      "The main challenge was creating a flexible system that could adapt to different business workflows while maintaining performance with large datasets. Solved by implementing efficient data caching strategies and modular architecture.",
   },
   {
     title: "File Management Automation Script",
@@ -78,30 +78,26 @@ export default function Projects() {
           Projects
         </h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: index * 0.15 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <Card
-                className="overflow-hidden hover:scale-105 transition-all duration-300 bg-card/50 backdrop-blur-sm border-card-border hover-elevate group cursor-pointer"
                 onClick={() => setSelectedProject(index)}
+                className="relative h-36 cursor-pointer overflow-hidden rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-transform duration-300"
               >
-                <div className="aspect-video overflow-hidden bg-muted">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
-                  <p className="text-muted-foreground">{project.description}</p>
-                  <p className="text-xs text-primary mt-4">Click to view details</p>
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter brightness-75"
+                  style={{ backgroundImage: `url(${project.image})` }}
+                />
+                <div className="relative z-10 p-4 flex flex-col justify-end h-full text-white">
+                  <h3 className="text-lg font-semibold">{project.title}</h3>
+                  <p className="text-sm opacity-90">{project.description}</p>
                 </div>
               </Card>
             </motion.div>
@@ -109,101 +105,141 @@ export default function Projects() {
         </div>
       </div>
 
-      {selectedProject !== null && (
-        <ProjectModal
-          project={projects[selectedProject]}
-          onClose={() => setSelectedProject(null)}
-        />
-      )}
+      <AnimatePresence>
+        {selectedProject !== null && (
+          <ProjectModal
+            project={projects[selectedProject]}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
 
 function ProjectModal({ project, onClose }: { project: typeof projects[0]; onClose: () => void }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Lock background scroll
+  useEffect(() => {
+    const originalStyle = document.body.style.cssText;
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed"; // prevent scroll jump on mobile
+    document.body.style.width = "100%";
+
+    return () => {
+      document.body.style.cssText = originalStyle;
+    };
+  }, []);
+
+  // Close on ESC key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, [onClose]);
+
+  // Prevent scroll bleed on mobile
+  useEffect(() => {
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!modalRef.current) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = modalRef.current;
+      const isScrollingUp = e.touches[0].clientY > e.touches[0].clientY;
+      const atTop = scrollTop === 0;
+      const atBottom = scrollTop + clientHeight >= scrollHeight;
+
+      // prevent scrolling beyond modal boundaries
+      if ((atTop && isScrollingUp) || (atBottom && !isScrollingUp)) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => document.removeEventListener("touchmove", handleTouchMove);
+  }, []);
+
   return (
     <motion.div
+      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm overflow-y-auto"
-      onClick={onClose}
+      onClick={onClose} // click outside closes modal
     >
-      <div className="flex justify-center p-4 md:p-8">
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 40, opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-          className="relative w-full max-w-5xl bg-card border border-card-border rounded-2xl shadow-xl overflow-hidden flex flex-col mt-12 mb-12"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Image Section */}
-          <div className="relative aspect-video overflow-hidden bg-muted">
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm hover:bg-background rounded-full"
-              onClick={onClose}
-            >
-              <X className="h-6 w-6" />
-            </Button>
-          </div>
+      <motion.div
+        ref={modalRef}
+        className="relative w-full max-w-4xl h-[80vh] bg-card border border-card-border rounded-2xl shadow-xl flex flex-col overflow-y-auto"
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        onClick={(e) => e.stopPropagation()} // prevent backdrop close
+      >
+        {/* Image */}
+        <div className="relative h-1/3 w-full flex-shrink-0">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-4 right-4 bg-background/80 backdrop-blur-sm rounded-full"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
 
-          {/* Project Details */}
-          <div className="p-6 md:p-10 space-y-6 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-3xl md:text-4xl font-bold">{project.title}</h2>
-            <p className="text-muted-foreground">{project.fullDescription}</p>
+        {/* Scrollable content */}
+        <div className="p-6 flex-1 space-y-4">
+          <h2 className="text-2xl md:text-3xl font-bold">{project.title}</h2>
+          <p className="text-muted-foreground">{project.fullDescription}</p>
 
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Technologies Used</h3>
-              <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Key Features</h3>
-              <ul className="grid md:grid-cols-2 gap-2">
-                {project.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className="text-primary mt-1">✓</span>
-                    <span className="text-muted-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-xl font-semibold mb-2">Challenges & Solutions</h3>
-              <p className="text-muted-foreground leading-relaxed">{project.challenges}</p>
-            </div>
-
-            <div className="flex flex-wrap gap-4 pt-4">
-              <Button
-                variant="secondary"
-                className="gap-2"
-                onClick={onClose}
-              >
-                <X className="h-4 w-4" />
-                Close
-              </Button>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Technologies Used</h3>
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((tech, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
-        </motion.div>
-      </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Key Features</h3>
+            <ul className="grid md:grid-cols-2 gap-2">
+              {project.features.map((feature, i) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-primary mt-1">✓</span>
+                  <span className="text-muted-foreground">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Challenges & Solutions</h3>
+            <p className="text-muted-foreground leading-relaxed">{project.challenges}</p>
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
+
+
+
+
+

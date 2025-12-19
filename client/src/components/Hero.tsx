@@ -73,26 +73,47 @@ export default function Hero() {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6 items-center">
           <Button
             size="lg"
-            className={`bg-cyan-500 hover:bg-cyan-600 text-white text-base flex items-center justify-center gap-2 transition-colors ${showButtonAnimations ? 'hero-button-hire' : 'opacity-0'}`}
+            className={`w-auto min-w-[160px] inline-flex items-center justify-center gap-2
+              bg-cyan-400/40 hover:bg-cyan-400/80
+              text-white-900
+              backdrop-blur-md
+              border border-cyan-300/30
+              shadow-[0_0_20px_rgba(34,211,238,0.25)]
+              hover:shadow-[0_0_30px_rgba(34,211,238,0.45)]
+              transition-all duration-300
+              ${showButtonAnimations ? "hero-button-hire" : "opacity-0"}
+            `}
             onClick={() => scrollToSection("#about")}
           >
             About Me
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Button>
+
 
           <Button
             size="lg"
             variant="outline"
-            className={`bg-pink-500 hover:bg-pink-600 text-white text-base ${showButtonAnimations ? 'hero-button-projects' : 'opacity-0'}`}
+            className={`w-auto min-w-[160px] inline-flex items-center justify-center gap-2
+              bg-pink-400/40 hover:bg-pink-400/80
+              text-white-100
+              backdrop-blur-md
+              border border-pink-300/30
+              shadow-[0_0_20px_rgba(236,72,153,0.25)]
+              hover:shadow-[0_0_30px_rgba(236,72,153,0.45)]
+              transition-all duration-300
+              ${showButtonAnimations ? "hero-button-projects" : "opacity-0"}
+            `}
             onClick={() => scrollToSection("#projects")}
           >
             Projects
-            <Download className="ml-2 h-5 w-5" />
+            <Download className="h-5 w-5" />
           </Button>
+
         </div>
+
       </div>    </section>
 
   );

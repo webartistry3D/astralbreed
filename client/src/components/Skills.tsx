@@ -264,16 +264,32 @@ function SkillsCarousel({
   const [cardWidth, setCardWidth] = useState(BASE_CARD_WIDTH);
 
   // Responsive width calculation
+  // Inside SkillsCarousel useEffect
   useEffect(() => {
     const calculateWidth = () => {
-      const scaleFactor = Math.min(window.innerWidth / 1280, 1); // scale down on smaller screens
-      setCardWidth(BASE_CARD_WIDTH * scaleFactor);
-      setTotalWidth((BASE_CARD_WIDTH * scaleFactor + GAP) * skills.length);
+      const screenWidth = window.innerWidth;
+
+      let scaleFactor = 1;
+      if (screenWidth < 640) {
+        scaleFactor = 1; // small phones, slightly bigger squares
+      } else if (screenWidth < 768) {
+        scaleFactor = 1; // tablets
+      } else if (screenWidth < 1024) {
+        scaleFactor = 1; // normal
+      } else {
+        scaleFactor = Math.min(screenWidth / 1280, 1);
+      }
+
+      const newCardSize = BASE_CARD_WIDTH * scaleFactor; // square: width = height
+      setCardWidth(newCardSize);
+      setTotalWidth((newCardSize + GAP) * skills.length);
     };
+
     calculateWidth();
     window.addEventListener("resize", calculateWidth);
     return () => window.removeEventListener("resize", calculateWidth);
   }, []);
+
 
   return (
     <div className="relative overflow-hidden">
@@ -380,7 +396,7 @@ function ExpandedSkillCard({
           <X />
         </button>
 
-        <div className="flex items-center gap-4 mb-6" style={{ color: skill.color }}>
+        <div className="flex items-center gap- mb-6" style={{ color: skill.color }}>
           <Icon className="w-12 h-12" />
           <h3 className="text-2xl font-bold">{skill.name}</h3>
         </div>
