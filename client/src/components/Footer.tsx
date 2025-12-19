@@ -2,8 +2,8 @@ import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com", label: "GitHub" },
-  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+  { icon: Github, href: "https://github.com/webartistry3D/astralbreed", label: "GitHub" },
+  { icon: Linkedin, href: "https://linkedin.com/in/karibeana", label: "LinkedIn" },
   //{ icon: Twitter, href: "https://twitter.com", label: "Twitter" },
   { icon: Mail, href: "mailto:webartistry.3d@gmail.com", label: "Email" },
 ];
