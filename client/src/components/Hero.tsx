@@ -67,7 +67,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-12 text-center">
         <div className="h-[60px] md:h-[80px] flex items-start justify-center">
           <TypingText
-            text={`Building systems that simplify complexity and unlock people.`}
+            text={`Building systems that simplify \n complexity and unlock people.`}
             speed={100}
             onComplete={handleTypingComplete}
           />
@@ -77,7 +77,7 @@ export default function Hero() {
           <Button
             size="lg"
             className={`w-auto min-w-[160px] inline-flex items-center justify-center gap-2
-              bg-cyan-400/40 hover:bg-cyan-400/80
+              bg-cyan-400/70 hover:bg-cyan-400/80
               text-white-900
               backdrop-blur-md
               border border-cyan-300/30
@@ -97,7 +97,7 @@ export default function Hero() {
             size="lg"
             variant="outline"
             className={`w-auto min-w-[160px] inline-flex items-center justify-center gap-2
-              bg-pink-400/40 hover:bg-pink-400/80
+              bg-pink-400/70 hover:bg-pink-400/80
               text-white-100
               backdrop-blur-md
               border border-pink-300/30
