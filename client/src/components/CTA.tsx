@@ -39,7 +39,7 @@ export default function CTA() {
               size="lg"
               className="
                 text-base group mt-6
-                bg-yellow-500 hover:bg-yellow-600
+                bg-yellow-500 hover:bg-yellow-300
                 text-black
               "
               data-testid="button-whatsapp"
