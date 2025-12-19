@@ -349,3 +349,9 @@ section {
   transform-origin: center;
   opacity: 0;
 }
+
+/* globals.css */
+html {
+  overflow-y: scroll;
+}
+
