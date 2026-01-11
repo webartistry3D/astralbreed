@@ -12,7 +12,7 @@
 
       "build": "npm run build:client && npm run build:server",
 
-      "deploy": "npm run build:client && gh-pages -d dist -f",
+      "deploy": "vite build && npx gh-pages --dist dist --branch gh-pages --no-history",
 
       "start": "NODE_ENV=production node server-dist/index.js",
 
