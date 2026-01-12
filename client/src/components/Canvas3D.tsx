@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 
-const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
+const MODEL_URL = `${import.meta.env.BASE_URL}/models/obot.glb`;
 
 function Model() {
   const { scene, animations } = useGLTF(MODEL_URL);
