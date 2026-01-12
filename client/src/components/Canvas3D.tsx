@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 function Model() {
   // Load GLB model with animations
-  const { scene, animations } = useGLTF("/models/obot.glb");
+  const { scene, animations } = useGLTF("/public/models/obot.glb");
   const { actions } = useAnimations(animations, scene);
 
   // Play all animations when available
@@ -42,7 +42,7 @@ function Model() {
 }
 
 // Preload the GLB globally for faster loading
-useGLTF.preload("/models/obot.glb");
+useGLTF.preload("/public/models/obot.glb");
 
 export default function Canvas3D() {
   return (
