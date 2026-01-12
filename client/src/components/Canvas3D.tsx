@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 function Model() {
   // Load GLB model with animations
-  const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
+  const MODEL_URL = `${import.meta.env.BASE_URL}public/models/obot.glb`;
   const { scene, animations } = useGLTF(MODEL_URL);
   //const { scene, animations } = useGLTF("/public/models/obot.glb");
   const { actions } = useAnimations(animations, scene);
