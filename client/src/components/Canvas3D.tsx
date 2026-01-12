@@ -6,8 +6,12 @@ import * as THREE from "three";
 
 function Model() {
   // Load GLB model with animations
-  const { scene, animations } = useGLTF("/public/models/obot.glb");
+  const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
+  const { scene, animations } = useGLTF(MODEL_URL);
+  //const { scene, animations } = useGLTF("/public/models/obot.glb");
   const { actions } = useAnimations(animations, scene);
+
+  useGLTF.preload(MODEL_URL);
 
   // Play all animations when available
   useEffect(() => {
@@ -42,7 +46,7 @@ function Model() {
 }
 
 // Preload the GLB globally for faster loading
-useGLTF.preload("/public/models/obot.glb");
+// useGLTF.preload("/public/models/obot.glb");
 
 export default function Canvas3D() {
   return (
@@ -53,7 +57,7 @@ export default function Canvas3D() {
     >
       <Suspense fallback={null}>
         {/* HDRI Lighting */}
-        <Environment files="/environment/citrus_orchard_puresky_1k.hdr" background />
+        {/* <Environment files="/environment/citrus_orchard_puresky_1k.hdr" background />*/}
 
         {/* User controls */}
         <OrbitControls
