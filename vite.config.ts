@@ -13,7 +13,7 @@ export default defineConfig({
     react(),
     runtimeErrorOverlay(),
   ],
-  base: '/astralbreed/', // GitHub Pages repo name
+  base: "/astralbreed/", // GitHub Pages repo name
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
