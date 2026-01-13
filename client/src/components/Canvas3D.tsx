@@ -13,14 +13,12 @@ import * as THREE from "three";
  * Resolves to:
  *   /astralbreed/models/obot.glb
  */
-const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
+//const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
 
-/*
 const MODEL_URL = new URL(
   "models/obot.glb",
   window.location.origin + import.meta.env.BASE_URL
 ).toString();
-*/
 
 /**
  * Preload ONCE at module scope
