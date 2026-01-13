@@ -1,52 +1,72 @@
-//Canvas3D.tsx
+// Canvas3D.tsx
 import { Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Environment, OrbitControls, useGLTF, useAnimations } from "@react-three/drei";
+import {
+  OrbitControls,
+  useGLTF,
+  useAnimations,
+} from "@react-three/drei";
 import * as THREE from "three";
 
+/**
+ * 🔐 GitHub Pages–safe, Vite-safe, Drei-safe model URL
+ * Resolves to:
+ *   /astralbreed/models/obot.glb
+ */
+const MODEL_URL = new URL(
+  "models/obot.glb",
+  window.location.origin + import.meta.env.BASE_URL
+).toString();
+
+/**
+ * Preload ONCE at module scope
+ * (Do NOT place inside components)
+ */
+useGLTF.preload(MODEL_URL);
+
 function Model() {
-  // Load GLB model with animations
-  const MODEL_URL = `${import.meta.env.BASE_URL}models/obot.glb`;
   const { scene, animations } = useGLTF(MODEL_URL);
-  //const { scene, animations } = useGLTF("/public/models/obot.glb");
   const { actions } = useAnimations(animations, scene);
 
-  useGLTF.preload(MODEL_URL);
-
-  // Play all animations when available
+  /**
+   * Play all animations safely
+   */
   useEffect(() => {
-    if (actions) {
-      Object.values(actions).forEach((action) => {
-        if (action) {
-          action.reset();                 // reset to start
-          action.play();                  // start animation
-          action.setLoop(THREE.LoopRepeat, Infinity); // loop forever
-          action.timeScale = 1;           // optional speed control
-        }
-      });
-    }
+    if (!actions) return;
+
+    Object.values(actions).forEach((action) => {
+      if (!action) return;
+
+      action.reset();
+      action.setLoop(THREE.LoopRepeat, Infinity);
+      action.timeScale = 1;
+      action.play();
+    });
   }, [actions]);
 
-  // Enable shadows on all meshes
-  scene.traverse((child: any) => {
-    if (child.isMesh) {
-      child.castShadow = true;
-      child.receiveShadow = true;
-    }
-  });
+  /**
+   * Enable shadows AFTER scene is guaranteed
+   */
+  useEffect(() => {
+    if (!scene) return;
+
+    scene.traverse((child: any) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  }, [scene]);
 
   return (
     <primitive
       object={scene}
-      scale={9}              // Adjust size
-      position={[0, -1, 0]}  // Slightly lower
-      rotation={[0, Math.PI / 4, 0]} // Initial rotation
+      scale={9}
+      position={[0, -1, 0]}
+      rotation={[0, Math.PI / 4, 0]}
     />
   );
 }
-
-// Preload the GLB globally for faster loading
-// useGLTF.preload("/public/models/obot.glb");
 
 export default function Canvas3D() {
   return (
@@ -56,20 +76,14 @@ export default function Canvas3D() {
       className="rounded-xl w-full h-full"
     >
       <Suspense fallback={null}>
-        {/* HDRI Lighting */}
-        {/* <Environment files="/environment/citrus_orchard_puresky_1k.hdr" background />*/}
-
-        {/* User controls */}
         <OrbitControls
           enableZoom={false}
           autoRotate
           autoRotateSpeed={0.75}
         />
 
-        {/* 3D Model */}
         <Model />
 
-        {/* Scene Lighting */}
         <directionalLight
           position={[5, 5, 5]}
           intensity={3}
@@ -77,6 +91,7 @@ export default function Canvas3D() {
           shadow-mapSize-width={1024}
           shadow-mapSize-height={1024}
         />
+
         <ambientLight intensity={0.4} />
       </Suspense>
     </Canvas>
