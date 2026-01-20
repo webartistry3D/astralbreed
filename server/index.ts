@@ -64,7 +64,7 @@ app.use((req, res, next) => {
     await setupVite(app, server);
   } else {
     // Production: redirect root to SPA path
-    app.get("/", (_req, res) => res.redirect("/astralbreed"));
+    app.get("/", (_req, res) => res.redirect("/"));
 
     // Serve static assets + SPA fallback
     serveStatic(app);
