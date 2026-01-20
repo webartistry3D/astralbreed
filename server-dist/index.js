@@ -25,10 +25,18 @@ var __dirname = path.dirname(__filename);
 var vite_config_default = defineConfig({
   plugins: [
     react(),
+    // React support
     runtimeErrorOverlay()
+    // Nice dev error overlay
   ],
-  base: "/astralbreed/",
-  // GitHub Pages repo name
+  // =========================
+  // Base path for production
+  // =========================
+  base: "/",
+  // Must match Express static prefix
+  // =========================
+  // Path aliases for imports
+  // =========================
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
@@ -36,23 +44,51 @@ var vite_config_default = defineConfig({
       "@assets": path.resolve(__dirname, "attached_assets")
     }
   },
+  // =========================
+  // Root of frontend source
+  // =========================
   root: path.resolve(__dirname, "client"),
-  // Build from client folder
+  // =========================
+  // Build output
+  // =========================
   build: {
     outDir: path.resolve(__dirname, "dist"),
-    // Build output in root/dist
-    emptyOutDir: true
+    // Output goes to project-root/dist
+    emptyOutDir: true,
+    // Clear old builds
+    sourcemap: true,
+    // Optional: helpful for debugging
+    rollupOptions: {
+      // Optional: prevent asset path issues
+      input: path.resolve(__dirname, "client", "index.html"),
+      output: {
+        assetFileNames: "assets/[name]-[hash][extname]",
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js"
+      }
+    }
   },
+  // =========================
+  // Dev server options
+  // =========================
   server: {
     fs: {
       strict: true,
       deny: ["**/.*"]
-    }
+      // Prevent access to hidden files
+    },
+    port: 5173,
+    // Optional: default Vite port
+    open: true
+    // Automatically open browser in dev
   }
 });
 
 // server/vite.ts
 import { nanoid } from "nanoid";
+import { fileURLToPath as fileURLToPath2 } from "url";
+var __filename2 = fileURLToPath2(import.meta.url);
+var __dirname2 = path2.dirname(__filename2);
 var viteLogger = createLogger();
 function log(message, source = "express") {
   const formattedTime = (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", {
@@ -87,12 +123,7 @@ async function setupVite(app2, server) {
   app2.use("*", async (req, res, next) => {
     const url = req.originalUrl;
     try {
-      const clientTemplate = path2.resolve(
-        import.meta.dirname,
-        "..",
-        "client",
-        "index.html"
-      );
+      const clientTemplate = path2.resolve(__dirname2, "..", "client", "index.html");
       if (!fs.existsSync(clientTemplate)) {
         throw new Error(`Could not find index.html: ${clientTemplate}`);
       }
@@ -111,7 +142,7 @@ async function setupVite(app2, server) {
   });
 }
 function serveStatic(app2) {
-  const distPath = path2.resolve(import.meta.dirname, "../dist");
+  const distPath = path2.resolve(__dirname2, "..", "dist");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
@@ -120,33 +151,31 @@ function serveStatic(app2) {
   app2.use(
     "/astralbreed",
     express.static(distPath, {
+      index: false,
       maxAge: "30d",
-      etag: false,
-      setHeaders: (res, filePath) => {
-        if (filePath.endsWith(".css")) res.setHeader("Content-Type", "text/css");
-        if (filePath.endsWith(".js")) res.setHeader("Content-Type", "application/javascript");
-        if (filePath.endsWith(".html")) res.setHeader("Content-Type", "text/html");
-      }
+      etag: false
     })
   );
   app2.get("/astralbreed/*", (_req, res) => {
     res.set("Cache-Control", "public, max-age=0, must-revalidate");
-    res.sendFile(path2.resolve(distPath, "index.html"));
+    res.sendFile(path2.join(distPath, "index.html"));
   });
 }
 
 // server/index.ts
 var app = express2();
-app.use(express2.json({
-  verify: (req, _res, buf) => {
-    req.rawBody = buf;
-  }
-}));
+app.use(
+  express2.json({
+    verify: (req, _res, buf) => {
+      req.rawBody = buf;
+    }
+  })
+);
 app.use(express2.urlencoded({ extended: false }));
 app.use((req, res, next) => {
   const start = Date.now();
   const path3 = req.path;
-  let capturedJsonResponse = void 0;
+  let capturedJsonResponse;
   const originalResJson = res.json;
   res.json = function(bodyJson, ...args) {
     capturedJsonResponse = bodyJson;
@@ -156,12 +185,8 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     if (path3.startsWith("/api")) {
       let logLine = `${req.method} ${path3} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "\u2026";
-      }
+      if (capturedJsonResponse) logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      if (logLine.length > 80) logLine = logLine.slice(0, 79) + "\u2026";
       log(logLine);
     }
   });
@@ -178,14 +203,18 @@ app.use((req, res, next) => {
   if (app.get("env") === "development") {
     await setupVite(app, server);
   } else {
+    app.get("/", (_req, res) => res.redirect("/astralbreed"));
     serveStatic(app);
   }
   const port = parseInt(process.env.PORT || "3001", 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: false
-  }, () => {
-    log(`serving on port ${port}`);
-  });
+  server.listen(
+    {
+      port,
+      host: "0.0.0.0",
+      reusePort: false
+    },
+    () => {
+      log(`Server running on port ${port}`);
+    }
+  );
 })();

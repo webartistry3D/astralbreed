@@ -102,7 +102,7 @@ export function serveStatic(app: Express) {
 
   // Serve static assets under /astralbreed
   app.use(
-    "/astralbreed",
+    "/",
     express.static(distPath, {
       index: false,
       maxAge: "30d",
@@ -111,7 +111,7 @@ export function serveStatic(app: Express) {
   );
 
   // SPA fallback for any route under /astralbreed
-  app.get("/astralbreed/*", (_req, res) => {
+  app.get("/*", (_req, res) => {
     res.set("Cache-Control", "public, max-age=0, must-revalidate");
     res.sendFile(path.join(distPath, "index.html"));
   });

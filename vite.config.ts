@@ -19,7 +19,7 @@ export default defineConfig({
   // =========================
   // Base path for production
   // =========================
-  base: "/astralbreed/", // Must match Express static prefix
+  base: "/", // Must match Express static prefix
 
   // =========================
   // Path aliases for imports
