@@ -4,16 +4,26 @@ import path from "path";
 import { fileURLToPath } from "url";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-// __dirname equivalent in ESM
+// =========================
+// Robust __dirname for ESM
+// =========================
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig({
   plugins: [
-    react(),
-    runtimeErrorOverlay(),
+    react(),                // React support
+    runtimeErrorOverlay(),  // Nice dev error overlay
   ],
-  base: "/astralbreed/", // GitHub Pages repo name
+  
+  // =========================
+  // Base path for production
+  // =========================
+  base: "/astralbreed/", // Must match Express static prefix
+
+  // =========================
+  // Path aliases for imports
+  // =========================
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client", "src"),
@@ -21,15 +31,39 @@ export default defineConfig({
       "@assets": path.resolve(__dirname, "attached_assets"),
     },
   },
-  root: path.resolve(__dirname, "client"), // Build from client folder
+
+  // =========================
+  // Root of frontend source
+  // =========================
+  root: path.resolve(__dirname, "client"),
+
+  // =========================
+  // Build output
+  // =========================
   build: {
-    outDir: path.resolve(__dirname, "dist"), // Build output in root/dist
-    emptyOutDir: true,
+    outDir: path.resolve(__dirname, "dist"), // Output goes to project-root/dist
+    emptyOutDir: true,                        // Clear old builds
+    sourcemap: true,                          // Optional: helpful for debugging
+    rollupOptions: {
+      // Optional: prevent asset path issues
+      input: path.resolve(__dirname, "client", "index.html"),
+      output: {
+        assetFileNames: "assets/[name]-[hash][extname]",
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js",
+      },
+    },
   },
+
+  // =========================
+  // Dev server options
+  // =========================
   server: {
     fs: {
       strict: true,
-      deny: ["**/.*"],
+      deny: ["**/.*"], // Prevent access to hidden files
     },
+    port: 5173,        // Optional: default Vite port
+    open: true,        // Automatically open browser in dev
   },
 });

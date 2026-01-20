@@ -5,7 +5,17 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { type Server } from "http";
 import viteConfig from "../vite.config";
 import { nanoid } from "nanoid";
+import { fileURLToPath } from "url";
 
+// =========================
+// Robust __dirname for ESM
+// =========================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// =========================
+// Vite logger
+// =========================
 const viteLogger = createLogger();
 
 /**
@@ -18,7 +28,6 @@ export function log(message: string, source = "express") {
     second: "2-digit",
     hour12: true,
   });
-
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
@@ -49,23 +58,18 @@ export async function setupVite(app: Express, server: Server) {
   // Use Vite middleware
   app.use(vite.middlewares);
 
-  // SPA fallback for all routes
+  // SPA fallback for all routes in dev
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
     try {
-      const clientTemplate = path.resolve(
-        import.meta.dirname,
-        "..",
-        "client",
-        "index.html"
-      );
+      const clientTemplate = path.resolve(__dirname, "..", "client", "index.html");
 
       if (!fs.existsSync(clientTemplate)) {
         throw new Error(`Could not find index.html: ${clientTemplate}`);
       }
 
-      // Always reload the index.html file from disk
+      // Always reload index.html from disk
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
@@ -88,8 +92,7 @@ export async function setupVite(app: Express, server: Server) {
  * Production mode: serve static assets and SPA fallback
  */
 export function serveStatic(app: Express) {
-  // Point to Vite build output
-  const distPath = path.resolve(import.meta.dirname, "../dist");
+  const distPath = path.resolve(__dirname, "..", "dist");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
@@ -97,23 +100,19 @@ export function serveStatic(app: Express) {
     );
   }
 
-  // Serve static assets under /astralbreed (matches vite.config.ts base)
+  // Serve static assets under /astralbreed
   app.use(
     "/astralbreed",
     express.static(distPath, {
+      index: false,
       maxAge: "30d",
       etag: false,
-      setHeaders: (res, filePath) => {
-        if (filePath.endsWith(".css")) res.setHeader("Content-Type", "text/css");
-        if (filePath.endsWith(".js")) res.setHeader("Content-Type", "application/javascript");
-        if (filePath.endsWith(".html")) res.setHeader("Content-Type", "text/html");
-      },
     })
   );
 
   // SPA fallback for any route under /astralbreed
-  app.get("/*", (_req, res) => {
+  app.get("/astralbreed/*", (_req, res) => {
     res.set("Cache-Control", "public, max-age=0, must-revalidate");
-    res.sendFile(path.resolve(distPath, "index.html"));
+    res.sendFile(path.join(distPath, "index.html"));
   });
 }
