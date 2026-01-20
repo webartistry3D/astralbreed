@@ -74,7 +74,7 @@ export default function Projects() {
       className="py-16 md:py-24 lg:py-32 bg-gradient-to-b from-primary/5 to-background scroll-mt-20"
     >
       <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-regular text-center mb-16">
           Projects
         </h2>
 

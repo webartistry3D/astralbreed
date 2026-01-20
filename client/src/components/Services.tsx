@@ -48,7 +48,7 @@ const services: Service[] = [
   },
   {
     icon: Code2,
-    title: "DevOps: Mobile & Web Apps",
+    title: "App Dev: Mobile & Web",
     description:
       "End-to-end development of scalable mobile and web applications—from architecture and UI to deployment and optimization. I build fast, accessible platforms with modern tooling, ensuring performance, reliability, and smooth growth as products evolve.",
   },
@@ -73,7 +73,7 @@ export default function Services() {
       <Background />
 
       <div className="relative z-10 max-w-3xl mx-auto px-6">
-        <h2 className="text-center text-4xl font-bold mb-12 text-white drop-shadow">
+        <h2 className="text-center text-5xl font-regular mb-12 text-white drop-shadow">
           Services
         </h2>
 
@@ -178,7 +178,7 @@ function ServiceCard({
         {/* HEADER (always visible) */}
         <header className="flex items-center gap-5 px-8 py-6">
           <Icon className="w-8 h-8 text-white/90 shrink-0" />
-          <h3 className="text-3xl font-semibold drop-shadow">
+          <h3 className="text-2xl font-regular drop-shadow">
             {service.title}
           </h3>
         </header>

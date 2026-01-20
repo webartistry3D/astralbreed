@@ -224,7 +224,7 @@ const skills = [
 ---------------------------------------------- */
 const BASE_CARD_WIDTH = 180;
 const GAP = 24;
-const SPEED = 100; // px/sec
+const SPEED = 50; // px/sec
 
 /* ---------------------------------------------
    SKILLS SECTION
@@ -234,7 +234,8 @@ export default function Skills() {
 
   return (
     <section id="skills" className="relative py-24 overflow-hidden bg-background">
-      <h2 className="text-center text-4xl font-bold mb-12">Skills</h2>
+      <h2 className="text-center text-5xl font-regular mb-12">Skills</h2>
+      <h2 className="text-center text-md font-regular mb-2">Click to explore</h2>
 
       <SkillsCarousel onSelect={setActiveSkill} />
 

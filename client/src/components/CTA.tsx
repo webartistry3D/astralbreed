@@ -16,7 +16,7 @@ export default function CTA() {
         {/* TEXT CENTERED */}
         <div className="text-center space-y-4 md:space-y-6 lg:space-y-8">
           <motion.h2
-            className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+            className="text-3xl md:text-4xl lg:text-5xl font-regular leading-tight"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}

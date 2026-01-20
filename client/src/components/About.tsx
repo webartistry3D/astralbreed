@@ -55,7 +55,7 @@ export default function About() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-8">
         <h2
-          className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-16 text-white"
+          className="text-3xl md:text-4xl lg:text-5xl font-regular text-center mb-16 text-white"
           data-aos="fade-up"
           data-aos-delay={150}
         >
