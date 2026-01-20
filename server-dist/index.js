@@ -72,6 +72,7 @@ async function setupVite(app2, server) {
   const vite = await createViteServer({
     ...vite_config_default,
     configFile: false,
+    // already imported
     customLogger: {
       ...viteLogger,
       error: (msg, options) => {
@@ -92,6 +93,9 @@ async function setupVite(app2, server) {
         "client",
         "index.html"
       );
+      if (!fs.existsSync(clientTemplate)) {
+        throw new Error(`Could not find index.html: ${clientTemplate}`);
+      }
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
       template = template.replace(
         `src="/src/main.tsx"`,
@@ -107,24 +111,25 @@ async function setupVite(app2, server) {
   });
 }
 function serveStatic(app2) {
-  const distPath = path2.resolve(import.meta.dirname, "public");
+  const distPath = path2.resolve(import.meta.dirname, "../dist");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`
     );
   }
-  app2.use(express.static(distPath, {
-    maxAge: "30d",
-    etag: false,
-    setHeaders: (res, path3) => {
-      if (/\.[a-f0-9]{8}\.(js|css|woff2|png|svg|ico)$/.test(path3)) {
-        res.set("Cache-Control", "public, max-age=31536000, immutable");
-      } else {
-        res.set("Cache-Control", "public, max-age=0, must-revalidate");
+  app2.use(
+    "/astralbreed",
+    express.static(distPath, {
+      maxAge: "30d",
+      etag: false,
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".css")) res.setHeader("Content-Type", "text/css");
+        if (filePath.endsWith(".js")) res.setHeader("Content-Type", "application/javascript");
+        if (filePath.endsWith(".html")) res.setHeader("Content-Type", "text/html");
       }
-    }
-  }));
-  app2.use("*", (_req, res) => {
+    })
+  );
+  app2.get("/astralbreed/*", (_req, res) => {
     res.set("Cache-Control", "public, max-age=0, must-revalidate");
     res.sendFile(path2.resolve(distPath, "index.html"));
   });
