@@ -48,7 +48,7 @@ const services: Service[] = [
   },
   {
     icon: Code2,
-    title: "App Dev: Mobile & Web",
+    title: "Mobile & Web",
     description:
       "End-to-end development of scalable mobile and web applications—from architecture and UI to deployment and optimization. I build fast, accessible platforms with modern tooling, ensuring performance, reliability, and smooth growth as products evolve.",
   },
